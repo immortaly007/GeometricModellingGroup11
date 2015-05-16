@@ -13,11 +13,13 @@ import jv.project.PvViewerIf;
 import jv.vecmath.PdVector;
 import jvx.project.PjWorkshop_Dialog;
 import workshop.MyWorkshop;
+import workshop.Task1;
 
 public class PgElementSet_Menu extends PgPointSet_Menu {
 	
 	private enum MenuEntry{
-		MyWorkshop			("MyWorkshop...")
+		MyWorkshop			("MyWorkshop..."),
+		Task1				("Task 1...")
 		// Additional entries...
 		;
 		
@@ -77,6 +79,19 @@ public class PgElementSet_Menu extends PgPointSet_Menu {
 			dialog.update(ws);
 			dialog.setVisible(true);
 			break;
+		case Task1:
+			Task1 task1Ws = new Task1();
+			task1Ws.setGeometry(m_elementSet);
+			if (currDisp == null) {
+				if (PsDebug.WARNING) PsDebug.warning("missing display.");
+			} else
+				task1Ws.setDisplay(currDisp);
+			dialog = new PjWorkshop_Dialog(false);
+			dialog.setParent(task1Ws);
+			dialog.update(task1Ws);
+			dialog.setVisible(true);
+			break;
+
 		}
 		
 		return true;

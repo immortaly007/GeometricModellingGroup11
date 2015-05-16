@@ -11,15 +11,18 @@ import jv.project.PgGeometryIf;
 import jv.project.PvDisplayIf;
 import jv.project.PvViewerIf;
 import jv.vecmath.PdVector;
+import jvx.project.PjWorkshop;
 import jvx.project.PjWorkshop_Dialog;
 import workshop.MyWorkshop;
 import workshop.Task1;
+import workshop.Task2;
 
 public class PgElementSet_Menu extends PgPointSet_Menu {
 	
 	private enum MenuEntry{
 		MyWorkshop			("MyWorkshop..."),
-		Task1				("Task 1...")
+		Task1				("Task 1..."),
+		Task2				("Task 2...")
 		// Additional entries...
 		;
 		
@@ -63,38 +66,36 @@ public class PgElementSet_Menu extends PgPointSet_Menu {
 			if (currDisp == null) PsDebug.warning("missing display.");
 		}
 
-		PsDialog dialog;
 		MenuEntry entry = MenuEntry.fromName(aMethod);
 		if(entry == null) return false;
 		switch (entry) {
-		case MyWorkshop:
-			MyWorkshop ws = new MyWorkshop();
-			ws.setGeometry(m_elementSet);
-			if (currDisp == null) {
-				if (PsDebug.WARNING) PsDebug.warning("missing display.");
-			} else
-				ws.setDisplay(currDisp);
-			dialog = new PjWorkshop_Dialog(false);
-			dialog.setParent(ws);
-			dialog.update(ws);
-			dialog.setVisible(true);
-			break;
-		case Task1:
-			Task1 task1Ws = new Task1();
-			task1Ws.setGeometry(m_elementSet);
-			if (currDisp == null) {
-				if (PsDebug.WARNING) PsDebug.warning("missing display.");
-			} else
-				task1Ws.setDisplay(currDisp);
-			dialog = new PjWorkshop_Dialog(false);
-			dialog.setParent(task1Ws);
-			dialog.update(task1Ws);
-			dialog.setVisible(true);
-			break;
+			case MyWorkshop:
+				ShowShizzle(currDisp, new MyWorkshop());
+				break;
+			case Task1:
+				ShowShizzle(currDisp, new Task1());
+				break;
+			case Task2:
+				ShowShizzle(currDisp, new Task2());
+				break;
+			// Additional entries...
 
 		}
 		
 		return true;
+	}
+
+	public void ShowShizzle(PvDisplayIf currDisp, PjWorkshop toshow) {
+		toshow.setGeometry(m_elementSet);
+		if (currDisp == null) {
+			if (PsDebug.WARNING) PsDebug.warning("missing display.");
+		} else
+			toshow.setDisplay(currDisp);
+		PsDialog dialog;
+		dialog = new PjWorkshop_Dialog(false);
+		dialog.setParent(toshow);
+		dialog.update(toshow);
+		dialog.setVisible(true);
 	}
 	
 	public PvViewerIf getViewer() { return m_viewer; }

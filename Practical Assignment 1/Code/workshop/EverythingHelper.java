@@ -3,21 +3,13 @@ package workshop;
 import jv.object.PsDebug;
 
 import java.util.Collections;
+import java.util.Collection;
 import java.util.List;
 
 /**
  * Created by Immortaly007 on 16-5-2015.
  */
 public class EverythingHelper {
-    public static double min(List<Double> values)
-    {
-        return Collections.min(values);
-    }
-
-    public static double max(List<Double> values)
-    {
-        return Collections.max(values);
-    }
 
     public static double sum(List<Double> values)
     {
@@ -48,7 +40,7 @@ public class EverythingHelper {
 
     public static String toSummaryString(List<Double> values)
     {
-        return "min=" + EverythingHelper.min(values) + ", max=" + EverythingHelper.max(values) + ", mean=" + EverythingHelper.mean(values) + ", std=" + EverythingHelper.std(values);
+        return "min=" + Collections.min(values) + ", max=" + Collections.max(values) + ", mean=" + EverythingHelper.mean(values) + ", std=" + EverythingHelper.std(values);
 
     }
 }

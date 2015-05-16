@@ -1,11 +1,13 @@
 package workshop;
 
+import jv.geom.PgEdgeStar;
 import jv.geom.PgElementSet;
 import jv.object.PsDebug;
 import jv.project.PgGeometry;
 import jv.vecmath.PdVector;
 import jv.vecmath.PiVector;
 import jvx.project.PjWorkshop;
+import util.Util;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -57,11 +59,17 @@ public class Task1 extends PjWorkshop{
             shapeRegularities.add(shapeRegularity);
         }
         EverythingHelper.filterNaN(shapeRegularities);
+        PsDebug.message("Shape regularity: " + EverythingHelper.toSummaryString(shapeRegularities));
 
         // Calculate all valences
-        
+        ArrayList<Integer> valences = new ArrayList<Integer>();
+        PgEdgeStar[] edgeStars = m_geom.makeEdgeStars();
+        for (PgEdgeStar star : edgeStars)
+        {
+            valences.add(star.getValence());
+        }
 
-        PsDebug.message("Shape regularity: " + EverythingHelper.toSummaryString(shapeRegularities));
+        PsDebug.message("Valences        : " + EverythingHelper.toSummaryString(valences));
     }
 
 }

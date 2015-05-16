@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="jars">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/jars/jvx.jar!/" />
+      <root url="jar://$PROJECT_DIR$/jars/vgpapp.jar!/" />
+      <root url="jar://$PROJECT_DIR$/jars/jvLite.jar!/" />
+      <root url="jar://$PROJECT_DIR$/jars/javaview.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

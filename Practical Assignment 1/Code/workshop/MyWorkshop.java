@@ -15,7 +15,7 @@ public class MyWorkshop extends PjWorkshop {
 	PgElementSet m_geomSave;
 	
 	public MyWorkshop() {
-		super("My Workshop");
+		super("Bas is awesome!");
 		init();
 	}
 	
@@ -45,6 +45,7 @@ public class MyWorkshop extends PjWorkshop {
 		m_geom.showElementColorFromVertices(false);
 		m_geom.showElementColors(true);	
 		m_geom.showSmoothElementColors(false);
+
 	}
 	
 	public void makeRandomVertexColors() {

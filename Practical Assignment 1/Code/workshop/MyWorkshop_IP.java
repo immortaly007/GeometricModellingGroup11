@@ -29,7 +29,7 @@ public class MyWorkshop_IP extends PjWorkshop_IP implements ActionListener {
 	
 	public void init() {
 		super.init();
-		setTitle("My Workshop");
+		setTitle("Bas zijn workshop");
 	}
 	
 	public String getNotice() {

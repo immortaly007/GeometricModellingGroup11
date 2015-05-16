@@ -1,11 +1,14 @@
 package workshop;
 
 import jv.geom.PgElementSet;
+import jv.object.PsDebug;
 import jv.project.PgGeometry;
 import jv.vecmath.PdVector;
+import jv.vecmath.PiVector;
 import jvx.project.PjWorkshop;
 
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.Random;
 
 /**
@@ -16,7 +19,7 @@ public class Task1 extends PjWorkshop{
     PgElementSet m_geomSave;
 
     public Task1() {
-        super("Bas is awesome!");
+        super("Task 1");
         init();
     }
 
@@ -31,52 +34,38 @@ public class Task1 extends PjWorkshop{
         super.init();
     }
 
-    public void makeRandomElementColors() {
-        //assure that the color array is allocated
-        m_geom.assureElementColors();
+    public void calculate() {
+        m_geom.getElements();
+        m_geom.getEdgeStars();
 
-        Random rand = new Random();
-        Color randomColor;
+        ArrayList<Double> shapeRegularities = new ArrayList<Double>();
+        for (PiVector elem : m_geom.getElements())
+        {
+            PdVector v1 = m_geom.getVertex(elem.getEntry(0));
+            PdVector v2 = m_geom.getVertex(elem.getEntry(1));
+            PdVector v3 = m_geom.getVertex(elem.getEntry(2));
 
-        int noe = m_geom.getNumElements();
-        for(int i=0; i<noe; i++){
-            randomColor = Color.getHSBColor(rand.nextFloat(), 1.0f, 1.0f);//new Color(rand.nextFloat(), rand.nextFloat(), rand.nextFloat());
-            m_geom.setElementColor(i, randomColor);
+            PdVector cache = new PdVector();
+            cache.sub(v2, v1); double a = cache.length();
+            cache.sub(v3, v2); double b = cache.length();
+            cache.sub(v3, v1); double c = cache.length();
+
+            double innerCircle = 0.5 * Math.sqrt(((b + c - a) * (c + a - b) * (a + b - c)) / (a + b + c));
+            double outerCircle = (a * b * c) / Math.sqrt((a + b + c) * (b + c - a) * (c + a - b) * (a + b - c));
+            if (a == 0 || b == 0 || c == 0)
+            {
+                innerCircle = 0;
+                outerCircle = Math.max(Math.max(a, b), c) / 2.0;
+            }
+            double shapeRegularity = innerCircle / outerCircle;
+            double s = (a + b + c) / 2.0;
+            double shapeRegularity2 = (4.0 * (s - a) * (s - b) * (s - c)) / (a * b * c);
+
+            PsDebug.message("a=" + a + ", b=" + b + ", c=" + c + ", innerCircle=" + innerCircle + ", outerCircle=" + outerCircle + ", sr=" + shapeRegularity + ", sr2=" + shapeRegularity2);
+            shapeRegularities.add(shapeRegularity);
         }
-        m_geom.showElementColorFromVertices(false);
-        m_geom.showElementColors(true);
-        m_geom.showSmoothElementColors(false);
-
+        m_geom.getArea();
+        PsDebug.message("Ik zal ff comitten");
     }
 
-    public void makeRandomVertexColors() {
-        //assure that the color array is allocated
-        m_geom.assureVertexColors();
-
-        Random rand = new Random();
-        Color randomColor;
-
-        int nov = m_geom.getNumVertices();
-        for(int i=0; i<nov; i++){
-            randomColor = Color.getHSBColor(rand.nextFloat(), 1.0f, 1.0f);
-            m_geom.setVertexColor(i, randomColor);
-        }
-
-        m_geom.showElementColors(true);
-        m_geom.showVertexColors(true);
-        m_geom.showElementColorFromVertices(true);
-        m_geom.showSmoothElementColors(true);
-    }
-
-
-    public void setXOff(double xOff) {
-        int nov = m_geom.getNumVertices();
-        PdVector v = new PdVector(3);
-        // the double array is v.m_data
-        for (int i=0; i<nov; i++) {
-            v.copyArray(m_geomSave.getVertex(i));
-            v.setEntry(0, v.getEntry(0)+xOff);
-            m_geom.setVertex(i, v);
-        }
-    }
 }

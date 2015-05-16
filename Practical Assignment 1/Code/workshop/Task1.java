@@ -35,9 +35,7 @@ public class Task1 extends PjWorkshop{
     }
 
     public void calculate() {
-        m_geom.getElements();
-        m_geom.getEdgeStars();
-
+        // Calculate all shape regularities
         ArrayList<Double> shapeRegularities = new ArrayList<Double>();
         for (PiVector elem : m_geom.getElements())
         {
@@ -50,22 +48,20 @@ public class Task1 extends PjWorkshop{
             cache.sub(v3, v2); double b = cache.length();
             cache.sub(v3, v1); double c = cache.length();
 
-            double innerCircle = 0.5 * Math.sqrt(((b + c - a) * (c + a - b) * (a + b - c)) / (a + b + c));
-            double outerCircle = (a * b * c) / Math.sqrt((a + b + c) * (b + c - a) * (c + a - b) * (a + b - c));
-            if (a == 0 || b == 0 || c == 0)
-            {
-                innerCircle = 0;
-                outerCircle = Math.max(Math.max(a, b), c) / 2.0;
-            }
-            double shapeRegularity = innerCircle / outerCircle;
             double s = (a + b + c) / 2.0;
-            double shapeRegularity2 = (4.0 * (s - a) * (s - b) * (s - c)) / (a * b * c);
+            double shapeRegularity = (4.0 * (s - a) * (s - b) * (s - c)) / (a * b * c);
+            if (a == 0 || b == 0 || c == 0)
+                shapeRegularity = 0;
 
-            PsDebug.message("a=" + a + ", b=" + b + ", c=" + c + ", innerCircle=" + innerCircle + ", outerCircle=" + outerCircle + ", sr=" + shapeRegularity + ", sr2=" + shapeRegularity2);
+            PsDebug.message("a=" + a + ", b=" + b + ", c=" + c + ", sr=" + shapeRegularity);
             shapeRegularities.add(shapeRegularity);
         }
-        m_geom.getArea();
-        PsDebug.message("Ik zal ff comitten");
+        EverythingHelper.filterNaN(shapeRegularities);
+
+        // Calculate all valences
+        
+
+        PsDebug.message("Shape regularity: " + EverythingHelper.toSummaryString(shapeRegularities));
     }
 
 }

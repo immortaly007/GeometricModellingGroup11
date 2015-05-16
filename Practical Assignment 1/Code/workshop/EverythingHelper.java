@@ -38,4 +38,15 @@ public class EverythingHelper {
             std += (v - avg) * (v - avg);
         return Math.sqrt(std);
     }
+
+    public static void filterNaN(List<Double> values)
+    {
+        values.removeIf(a -> a.isNaN());
+    }
+
+    public static String toSummaryString(List<Double> values)
+    {
+        return "min=" + EverythingHelper.min(values) + ", max=" + EverythingHelper.max(values) + ", mean=" + EverythingHelper.mean(values) + ", std=" + EverythingHelper.std(values);
+
+    }
 }

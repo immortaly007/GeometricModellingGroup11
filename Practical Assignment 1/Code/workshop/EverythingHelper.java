@@ -1,6 +1,7 @@
 package workshop;
 
 import java.util.Collections;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -9,7 +10,8 @@ import java.util.List;
 public class EverythingHelper {
     public static double min(List<Double> values)
     {
-        return Collections.min(values);
+    	Collection<Double> c = CollectionFilter.filter(values, new NanFilter());
+        return Collections.min(c);
     }
 
     public static double max(List<Double> values)

@@ -47,6 +47,11 @@ public class EverythingHelper {
         values.removeIf(a -> a.isNaN());
     }
 
+    public static void filterInfinity(Collection<Double> values)
+    {
+        values.removeIf(a -> a.isInfinite());
+    }
+
     public static <T extends Number & Comparable<? super T>> String toSummaryString(Collection<? extends T> values)
     {
         return "min=" + EverythingHelper.min(values) + ", max=" + EverythingHelper.max(values) + ", mean=" + EverythingHelper.mean(values).setScale(8, RoundingMode.HALF_UP) + ", std=" + EverythingHelper.std(values).setScale(8, RoundingMode.HALF_UP);

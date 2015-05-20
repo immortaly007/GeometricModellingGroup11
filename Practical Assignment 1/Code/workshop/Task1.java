@@ -12,7 +12,8 @@ import util.Util;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Collection;
-
+import javax.swing.*;
+import javax.swing.table.*;
 /**
  * Created by Immortaly007 on 16-5-2015.
  */
@@ -39,22 +40,34 @@ public class Task1 extends PjWorkshop{
         super.init();
     }
 
-    public void calculate() {
+    public void calculate(JTable table) {
         // Calculate all shape regularities
         Collection<Double> shapeRegularities = calculateShapeRegularities(m_geomTrian);
-        PsDebug.message("Shape regularity: " + EverythingHelper.toSummaryString(shapeRegularities));
-
-        // Calculate all valences
         Collection<Integer> valences = calculateValences(m_geomTrian);
-        PsDebug.message("Valences        : " + EverythingHelper.toSummaryString(valences));
+		Collection<Double> angles = calculateTriangleAngles(m_geomTrian);
+		Collection<Double> edgeLengths = calculateEdgeLengths(m_geomTrian);
 
-        // Calculate the angles of all triangles
-        Collection<Double> angles = calculateTriangleAngles(m_geomTrian);
-        PsDebug.message("Angles          : " + EverythingHelper.toSummaryString(angles));
+        TableModel model = table.getModel();
 
-        // Compute the lengths of all edges
-        Collection<Double> edgeLengths = calculateEdgeLengths(m_geomTrian);
-        PsDebug.message("Edge lengths    : " + EverythingHelper.toSummaryString(edgeLengths));
+        model.setValueAt(EverythingHelper.min(shapeRegularities), 0, 1);
+        model.setValueAt(EverythingHelper.max(shapeRegularities), 0, 2);
+        model.setValueAt(EverythingHelper.mean(shapeRegularities), 0, 3);
+        model.setValueAt(EverythingHelper.std(shapeRegularities), 0, 4);
+
+        model.setValueAt(EverythingHelper.min(valences), 1, 1);
+        model.setValueAt(EverythingHelper.max(valences), 1, 2);
+        model.setValueAt(EverythingHelper.mean(valences), 1, 3);
+        model.setValueAt(EverythingHelper.std(valences), 1, 4);
+
+        model.setValueAt(EverythingHelper.min(angles), 2, 1);
+        model.setValueAt(EverythingHelper.max(angles), 2, 2);
+        model.setValueAt(EverythingHelper.mean(angles), 2, 3);
+        model.setValueAt(EverythingHelper.std(angles), 2, 4);
+
+        model.setValueAt(EverythingHelper.min(edgeLengths), 3, 1);
+        model.setValueAt(EverythingHelper.max(edgeLengths), 3, 2);
+        model.setValueAt(EverythingHelper.mean(edgeLengths), 3, 3);
+        model.setValueAt(EverythingHelper.std(edgeLengths), 3, 4);
     }
 
     private static Collection<Double> calculateShapeRegularities(PgElementSet set)

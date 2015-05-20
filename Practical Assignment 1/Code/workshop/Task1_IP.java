@@ -7,12 +7,14 @@ import jvx.project.PjWorkshop_IP;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import javax.swing.*;
 
 /**
  * Created by Immortaly007 on 16-5-2015.
  */
 public class Task1_IP extends PjWorkshop_IP implements ActionListener {
     protected Button m_bCalculate;
+    protected JTable m_tAnalysis;
     Task1 m_ws;
 
     public Task1_IP() {
@@ -40,8 +42,18 @@ public class Task1_IP extends PjWorkshop_IP implements ActionListener {
         m_bCalculate.addActionListener(this);
         add(m_bCalculate);
 
-
-
+        String[] columns = { "metric", "min", "max", "mean", "std. dev." };
+        Object[][] data = {
+        		{ "shape regularity", "n/a", "n/a", "n/a", "n/a", "n/a" },
+        		{ "valence", "n/a", "n/a", "n/a", "n/a", "n/a" }, 
+        		{ "angles", "n/a", "n/a", "n/a", "n/a", "n/a" },
+        		{ "edge length", "n/a", "n/a", "n/a", "n/a", "n/a" }
+        };
+        m_tAnalysis = new JTable(data, columns);
+        m_tAnalysis.setFillsViewportHeight(true);
+        JScrollPane scrollPane = new JScrollPane(m_tAnalysis);
+        add(scrollPane);
+        
         validate();
     }
 
@@ -53,7 +65,7 @@ public class Task1_IP extends PjWorkshop_IP implements ActionListener {
     public void actionPerformed(ActionEvent event) {
         Object source = event.getSource();
         if (source == m_bCalculate) {
-            m_ws.calculate();
+            m_ws.calculate(m_tAnalysis);
             return;
         }
     }

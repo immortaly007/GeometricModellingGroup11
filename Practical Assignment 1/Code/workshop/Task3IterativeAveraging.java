@@ -68,6 +68,7 @@ public class Task3IterativeAveraging extends PjWorkshop {
 
         for (int i = 0; i < m_geom.getVertices().length; i++) {
             PdVector scaledOffset = vertexOffsets[i];
+            if (scaledOffset == null) continue;
             scaledOffset.multScalar(stepwidth);
             m_geom.setVertex(i, PdVector.addNew(m_geom.getVertex(i), scaledOffset));
         }

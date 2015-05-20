@@ -1,8 +1,12 @@
 package workshop;
 
+import jv.geom.PgElementSet;
+import jv.vecmath.PiVector;
+
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.math.RoundingMode;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.function.BinaryOperator;
@@ -51,6 +55,4 @@ public class EverythingHelper {
     {
         return "min=" + EverythingHelper.min(values) + ", max=" + EverythingHelper.max(values) + ", mean=" + EverythingHelper.mean(values).setScale(8, RoundingMode.HALF_UP) + ", std=" + EverythingHelper.std(values).setScale(8, RoundingMode.HALF_UP);
     }
-
-
 }

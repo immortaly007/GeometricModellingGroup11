@@ -77,7 +77,7 @@ public class Task1 extends PjWorkshop{
             PdVector v2 = m_geom.getVertex(e.getEntry(1));
             PdVector v3 = m_geom.getVertex(e.getEntry(2));
             float sr = (float) calculateShapeRegularity(v1, v2, v3);
-            colors[i] = new Color(2*sr, 2*sr, 2*sr);
+            colors[i] = Color.getHSBColor(0, 1 - 2*sr, 1);
         }
 
         m_geom.setElementColors(colors);

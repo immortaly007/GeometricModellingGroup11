@@ -40,9 +40,10 @@ public class EverythingHelper {
         BigDecimal std = BigDecimal.ZERO;
         for (Number nv : values) {
             BigDecimal v =  new BigDecimal(nv.doubleValue());
-            BigDecimal vMinAvg = v.min(avg);
-            std = std.add(vMinAvg.multiply(vMinAvg));
+            BigDecimal vMinAvg = v.min(avg);  // vMinAvg = v - avg
+            std = std.add(vMinAvg.multiply(vMinAvg)); // std += (v - avg) * (v - avg)
         }
+        std = std.divide(new BigDecimal(values.size()));
         return new BigDecimal(Math.sqrt(std.doubleValue()));
     }
 

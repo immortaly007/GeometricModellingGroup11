@@ -14,6 +14,7 @@ import javax.swing.*;
  */
 public class Task1_IP extends PjWorkshop_IP implements ActionListener {
     protected Button m_bCalculate;
+    protected Button m_bColor;
     protected JTable m_tAnalysis;
     Task1 m_ws;
 
@@ -42,10 +43,14 @@ public class Task1_IP extends PjWorkshop_IP implements ActionListener {
         m_bCalculate.addActionListener(this);
         add(m_bCalculate);
 
+        m_bColor = new Button("Color...");
+        m_bColor.addActionListener(this);
+        add(m_bColor);
+
         String[] columns = { "metric", "min", "max", "mean", "std. dev." };
         Object[][] data = {
         		{ "shape regularity", "n/a", "n/a", "n/a", "n/a", "n/a" },
-        		{ "valence", "n/a", "n/a", "n/a", "n/a", "n/a" }, 
+        		{ "valence", "n/a", "n/a", "n/a", "n/a", "n/a" },
         		{ "angles", "n/a", "n/a", "n/a", "n/a", "n/a" },
         		{ "edge length", "n/a", "n/a", "n/a", "n/a", "n/a" }
         };
@@ -53,7 +58,7 @@ public class Task1_IP extends PjWorkshop_IP implements ActionListener {
         m_tAnalysis.setFillsViewportHeight(true);
         JScrollPane scrollPane = new JScrollPane(m_tAnalysis);
         add(scrollPane);
-        
+
         validate();
     }
 
@@ -67,6 +72,10 @@ public class Task1_IP extends PjWorkshop_IP implements ActionListener {
         if (source == m_bCalculate) {
             m_ws.calculate(m_tAnalysis);
             return;
+        }
+        if (source == m_bColor) {
+        	m_ws.color();
+        	return;
         }
     }
 }

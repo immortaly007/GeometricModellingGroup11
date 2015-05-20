@@ -19,8 +19,6 @@ import javax.swing.table.*;
  */
 public class Task1 extends PjWorkshop{
     PgElementSet m_geom;
-    PgElementSet m_geomSave;
-    PgElementSet m_geomTrian;
 
     public Task1() {
         super("Task 1");
@@ -30,10 +28,8 @@ public class Task1 extends PjWorkshop{
     @Override
     public void setGeometry(PgGeometry geom) {
         super.setGeometry(geom);
-        m_geom 		= (PgElementSet)super.m_geom;
-        m_geomSave 	= (PgElementSet)super.m_geomSave;
-        m_geomTrian = (PgElementSet)m_geom.clone();
-        PgElementSet.triangulate(m_geomTrian);
+        m_geom = (PgElementSet) super.getGeometry();
+        PgElementSet.triangulate(m_geom);
     }
 
     public void init() {
@@ -42,10 +38,10 @@ public class Task1 extends PjWorkshop{
 
     public void calculate(JTable table) {
         // Calculate all shape regularities
-        Collection<Double> shapeRegularities = calculateShapeRegularities(m_geomTrian);
-        Collection<Integer> valences = calculateValences(m_geomTrian);
-		Collection<Double> angles = calculateTriangleAngles(m_geomTrian);
-		Collection<Double> edgeLengths = calculateEdgeLengths(m_geomTrian);
+        Collection<Double> shapeRegularities = calculateShapeRegularities(m_geom);
+        Collection<Integer> valences = calculateValences(m_geom);
+		Collection<Double> angles = calculateTriangleAngles(m_geom);
+		Collection<Double> edgeLengths = calculateEdgeLengths(m_geom);
 
         TableModel model = table.getModel();
 
@@ -68,6 +64,26 @@ public class Task1 extends PjWorkshop{
         model.setValueAt(EverythingHelper.max(edgeLengths), 3, 2);
         model.setValueAt(EverythingHelper.mean(edgeLengths), 3, 3);
         model.setValueAt(EverythingHelper.std(edgeLengths), 3, 4);
+    }
+
+    public void color() {
+    	m_geom.assureElementColors();
+    	int n = m_geom.getNumElements();
+    	Color[] colors = new Color[n];
+
+        for (int i = 0; i < n; i++) {
+            PiVector e = m_geom.getElement(i);
+            PdVector v1 = m_geom.getVertex(e.getEntry(0));
+            PdVector v2 = m_geom.getVertex(e.getEntry(1));
+            PdVector v3 = m_geom.getVertex(e.getEntry(2));
+            float sr = (float) calculateShapeRegularity(v1, v2, v3);
+            colors[i] = new Color(2*sr, 2*sr, 2*sr);
+        }
+
+        m_geom.setElementColors(colors);
+        m_geom.showElementColors(true);
+        m_geom.update(m_geom);
+
     }
 
     private static Collection<Double> calculateShapeRegularities(PgElementSet set)

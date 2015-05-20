@@ -13,16 +13,16 @@ import jv.project.PvViewerIf;
 import jv.vecmath.PdVector;
 import jvx.project.PjWorkshop;
 import jvx.project.PjWorkshop_Dialog;
-import workshop.MyWorkshop;
-import workshop.Task1;
-import workshop.Task2;
+import workshop.*;
 
 public class PgElementSet_Menu extends PgPointSet_Menu {
 	
 	private enum MenuEntry{
-		MyWorkshop			("MyWorkshop..."),
-		Task1				("Task 1..."),
-		Task2				("Task 2...")
+		MyWorkshop              ("MyWorkshop..."),
+		Task1                   ("Task 1..."),
+		Task2                   ("Task 2..."),
+		Task3IterativeAveraging ("Task 3 (Iterative Averaging)..."),
+		Task3MeanCurvatureFlow  ("Task 3 (Mean Curvature Flow)..."),
 		// Additional entries...
 		;
 		
@@ -77,6 +77,12 @@ public class PgElementSet_Menu extends PgPointSet_Menu {
 				break;
 			case Task2:
 				ShowShizzle(currDisp, new Task2());
+				break;
+			case Task3IterativeAveraging:
+				ShowShizzle(currDisp, new Task3IterativeAveraging());
+				break;
+			case Task3MeanCurvatureFlow:
+				ShowShizzle(currDisp, new Task3MeanCurvatureFlow());
 				break;
 			// Additional entries...
 

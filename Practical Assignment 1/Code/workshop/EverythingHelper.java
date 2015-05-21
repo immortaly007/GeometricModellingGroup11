@@ -6,9 +6,7 @@ import jv.vecmath.PiVector;
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.math.RoundingMode;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
+import java.util.*;
 import java.util.function.BinaryOperator;
 
 /**
@@ -55,5 +53,30 @@ public class EverythingHelper {
     public static <T extends Number & Comparable<? super T>> String toSummaryString(Collection<? extends T> values)
     {
         return "min=" + EverythingHelper.min(values) + ", max=" + EverythingHelper.max(values) + ", mean=" + EverythingHelper.mean(values).setScale(8, RoundingMode.HALF_UP) + ", std=" + EverythingHelper.std(values).setScale(8, RoundingMode.HALF_UP);
+    }
+
+    public static SimpleVertexStar[] makeVertexStars(PgElementSet geom)
+    {
+        SimpleVertexStar[] vertexStars = new SimpleVertexStar[geom.getVertices().length];
+        for (PiVector elem : geom.getElements())
+        {
+            for (int i = 0; i < elem.getSize(); i++)
+            {
+                int curVertex = elem.getEntry(i);
+                if (vertexStars[curVertex] == null) {
+                    vertexStars[curVertex] = new SimpleVertexStar(curVertex, geom);
+                }
+                int leftNeighborId = i - 1;
+                if (leftNeighborId < 0) leftNeighborId = elem.getSize() - 1;
+                int rightNeighborId = i + 1;
+                if (rightNeighborId >= elem.getSize()) rightNeighborId = 0;
+
+                int leftNeighbor = elem.getEntry(leftNeighborId);
+                int rightNeighbor = elem.getEntry(rightNeighborId);
+                vertexStars[curVertex].addNeighbor(leftNeighbor);
+                vertexStars[curVertex].addNeighbor(rightNeighbor);
+            }
+        }
+        return vertexStars;
     }
 }

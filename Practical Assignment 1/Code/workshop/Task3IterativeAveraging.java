@@ -7,6 +7,7 @@ import jv.vecmath.PdVector;
 import jv.vecmath.PiVector;
 import jvx.geom.PgVertexStar;
 import jvx.project.PjWorkshop;
+import sun.java2d.pipe.SpanShapeRenderer;
 import util.Util;
 
 import java.util.ArrayList;
@@ -38,22 +39,15 @@ public class Task3IterativeAveraging extends PjWorkshop {
     {
         // For each vertex, calculate the average position of it's neighbors
         // Then subtract this average from the current vertex position
-        PgVertexStar[] stars =  Util.getVertexStars(m_geom);
+        SimpleVertexStar[] stars =  EverythingHelper.makeVertexStars(m_geom);
         PdVector[] vertexOffsets = new PdVector[m_geom.getVertices().length];
-        for (PgVertexStar star : stars)
+        for (SimpleVertexStar star : stars)
         {
-            if (star.getSize() == 1) {
-                vertexOffsets[star.getFirstElemInd()] = new PdVector(0, 0, 0);
-                continue;
-            }
-            PiVector starElement = star.getElement();
-            PdVector center = m_geom.getVertex(star.getFirstElemInd());
+            PdVector center = star.getCenter();
             ArrayList<Double> xCoords = new ArrayList<Double>();
             ArrayList<Double> yCoords = new ArrayList<Double>();
             ArrayList<Double> zCoords = new ArrayList<Double>();
-            for (int i = 0; i < star.getElement().getSize(); i++) {
-                if (i == star.getFirstElemInd()) continue;
-                PdVector vertex = m_geom.getVertex(starElement.getEntry(i));
+            for (PdVector vertex : star.getNeighborVertices()) {
                 xCoords.add(vertex.getEntry(0));
                 yCoords.add(vertex.getEntry(1));
                 zCoords.add(vertex.getEntry(2));
@@ -63,7 +57,7 @@ public class Task3IterativeAveraging extends PjWorkshop {
                     EverythingHelper.mean(yCoords).doubleValue(),
                     EverythingHelper.mean(zCoords).doubleValue()
             );
-            vertexOffsets[star.getElement().getEntry(star.getFirstElemInd())] = PdVector.subNew(mean, center);
+            vertexOffsets[star.getCenterVertex()] = PdVector.subNew(mean, center);
         }
 
         for (int i = 0; i < m_geom.getVertices().length; i++) {

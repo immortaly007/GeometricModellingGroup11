@@ -1,5 +1,6 @@
 package workshop;
 
+import java.awt.*;
 import java.util.ArrayList;
 
 import javafx.scene.paint.Color;
@@ -56,16 +57,30 @@ public class Task2 extends PjWorkshop {
             meanCurvatures.add(length);
         }
 
-        PsDebug.message("maxLength = " + maxLength);
-        for (int i = 0; i < stars.length; i++) {
-            m_geom.setVertexColor(i, new java.awt.Color(
-                    (float)(meanCurvatures.get(i) / maxLength),
-                    (float)(meanCurvatures.get(i) / maxLength),
-                    (float)(meanCurvatures.get(i) / maxLength)));
-        }
 
+        PsDebug.message("maxLength = " + maxLength);
+
+
+        ArrayList<Double> meanCurvatures_copy = new ArrayList<>(meanCurvatures);
         EverythingHelper.filterNaN(meanCurvatures);
         EverythingHelper.filterInfinity(meanCurvatures);
+
+        float min = EverythingHelper.min(meanCurvatures).floatValue();
+        float max = EverythingHelper.max(meanCurvatures).floatValue();
+        float avg = EverythingHelper.mean(meanCurvatures).floatValue();
+        float std = EverythingHelper.std(meanCurvatures).floatValue();
+        PsDebug.message(min + " ; " + max + " ; " + avg + " ; " + std);
+        min = Math.max(min, avg - std * 2f);
+        max = Math.min(max, avg + std * 2f);
+
+        for (int i = 0; i < stars.length; i++) {
+            float value = (meanCurvatures_copy.get(i).floatValue() - min) / (max - min);
+            PsDebug.message("Vertex " + i + " has curvature length " + value);
+            m_geom.setVertexColor(i, new java.awt.Color(
+                    EverythingHelper.clamp(value, 0f, 1f/3f),
+                    EverythingHelper.clamp(value, 1f/3f, 2f/3f),
+                    EverythingHelper.clamp(value, 2f/3f, 1f)));
+        }
 
         PsDebug.message("genus = " + genus());
         PsDebug.message("area = " + area);

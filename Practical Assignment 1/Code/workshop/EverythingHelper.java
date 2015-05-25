@@ -22,6 +22,12 @@ public class EverythingHelper {
         return Collections.max(values);
     }
 
+    public static <T extends Comparable<T>> T clamp(T val, T min, T max)  {
+        if (val.compareTo(min) < 0) return min;
+        else if (val.compareTo(max) > 0) return max;
+        else return val;
+    }
+
     public static <T extends Number> BigDecimal sum(Collection<? extends T> values) {
         BigDecimal sum = BigDecimal.ZERO;
         for (final Number v : values) sum = sum.add(new BigDecimal(v.doubleValue()));

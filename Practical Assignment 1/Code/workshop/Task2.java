@@ -1,9 +1,5 @@
 package workshop;
 
-import java.awt.*;
-import java.util.ArrayList;
-
-import javafx.scene.paint.Color;
 import jv.geom.PgElementSet;
 import jv.object.PsDebug;
 import jv.project.PgGeometry;
@@ -12,6 +8,8 @@ import jv.vecmath.PiVector;
 import jvx.geom.PgVertexStar;
 import jvx.project.PjWorkshop;
 import util.Util;
+
+import java.util.ArrayList;
 
 public class Task2 extends PjWorkshop {
 
@@ -57,10 +55,6 @@ public class Task2 extends PjWorkshop {
             meanCurvatures.add(length);
         }
 
-
-        PsDebug.message("maxLength = " + maxLength);
-
-
         ArrayList<Double> meanCurvatures_copy = new ArrayList<>(meanCurvatures);
         EverythingHelper.filterNaN(meanCurvatures);
         EverythingHelper.filterInfinity(meanCurvatures);
@@ -69,7 +63,7 @@ public class Task2 extends PjWorkshop {
         float max = EverythingHelper.max(meanCurvatures).floatValue();
         float avg = EverythingHelper.mean(meanCurvatures).floatValue();
         float std = EverythingHelper.std(meanCurvatures).floatValue();
-        PsDebug.message(min + " ; " + max + " ; " + avg + " ; " + std);
+        //PsDebug.message(min + " ; " + max + " ; " + avg + " ; " + std);
         min = Math.max(min, avg - std * 3f);
         max = Math.min(max, avg + std * 3f);
 
@@ -176,27 +170,6 @@ public class Task2 extends PjWorkshop {
 
         // done
         return curvature;
-    }
-
-    private int getOpposingVertex(PiVector elements, int shared1, int shared2, int opposite) {
-        // find the element with the 2 sharing vertices, and return the opposing vertex
-        // we do this, because we do no assumption on the order of the elements in the star, since the javadoc does not specify this
-        //PsDebug.message(shared1 + " ~ " + shared2 + " ~ " + opposite);
-        for (int i = 0; i < elements.getSize(); i++) {
-            int elementIndex = elements.getEntry(i);
-            PiVector element = m_triangulated.getElement(elementIndex);
-            //PsDebug.message("  (" + element.getEntry(0) + " ~ " + element.getEntry(1) + " ~ " + element.getEntry(2) + ")");
-            if (element.contains(shared1) && element.contains(shared2) && !element.contains(opposite)) {
-                //PsDebug.message("aww yes");
-                for (int q = 0; q < 3; q++) {
-                    int vertexIndex = element.getEntry(q);
-                    if (vertexIndex != shared1 && vertexIndex != shared2) {
-                        return vertexIndex;
-                    }
-                }
-            }
-        }
-        return -1;
     }
 
     private double triangleArea(PdVector v1, PdVector v2, PdVector v3) {

@@ -70,16 +70,12 @@ public class Task2 extends PjWorkshop {
         float avg = EverythingHelper.mean(meanCurvatures).floatValue();
         float std = EverythingHelper.std(meanCurvatures).floatValue();
         PsDebug.message(min + " ; " + max + " ; " + avg + " ; " + std);
-        min = Math.max(min, avg - std * 2f);
-        max = Math.min(max, avg + std * 2f);
+        min = Math.max(min, avg - std * 3f);
+        max = Math.min(max, avg + std * 3f);
 
         for (int i = 0; i < stars.length; i++) {
-            float value = (meanCurvatures_copy.get(i).floatValue() - min) / (max - min);
-            PsDebug.message("Vertex " + i + " has curvature length " + value);
-            m_geom.setVertexColor(i, new java.awt.Color(
-                    EverythingHelper.clamp(value, 0f, 1f/3f),
-                    EverythingHelper.clamp(value, 1f/3f, 2f/3f),
-                    EverythingHelper.clamp(value, 2f/3f, 1f)));
+            float value = EverythingHelper.clamp((meanCurvatures_copy.get(i).floatValue() - min) / (max - min), 0f, 1f);
+            m_geom.setVertexColor(i, new java.awt.Color(value, value, value));
         }
 
         PsDebug.message("genus = " + genus());
@@ -103,7 +99,6 @@ public class Task2 extends PjWorkshop {
     }
 
     private PdVector meanCurvature(PgVertexStar star) {
-        PsDebug.message("--------------------------------------------------");
         double area = 0;
         for (int e : star.getElement().getEntries()) {
             area += elementArea( m_triangulated.getElement(e));
@@ -113,56 +108,58 @@ public class Task2 extends PjWorkshop {
         PdVector curvature = new PdVector(0,0,0);
         PiVector mainIndices = star.getVertexLocInd();
         PiVector elements = star.getElement();
+        boolean closed = false;
 
-        PiVector first = m_triangulated.getElement(elements.getEntry(0));
-        int firstCenterIndex = mainIndices.getEntry(0);
-        PiVector last = m_triangulated.getElement(elements.getEntry(elements.getSize() - 1));
-        int lastCenterIndex = mainIndices.getEntry(mainIndices.getSize() - 1);
-        boolean closed = last.getEntry((lastCenterIndex + 2) % first.getSize()) == first.getEntry((firstCenterIndex + 1) % first.getSize());
-
-        PsDebug.message("CLOSED? " + closed);
-
-        // loop over each element in the star
+        ArrayList<Integer> vertexRing = new ArrayList<>();
+        int centerIndex = 0;
         for (int i = 0; i < elements.getSize(); i++) {
-            // get the element and the center vertex local index
+
+            // get the element
             int elementIndex = elements.getEntry(i);
             int centerLocalIndex = mainIndices.getEntry(i);
             PiVector element = m_triangulated.getElement(elementIndex);
 
-            // get all vertex indices required
-            int centerIndex = element.getEntry(centerLocalIndex);
-            int currentIndex = element.getEntry((centerLocalIndex + 1) % element.getSize());
-            int otherAIndex = element.getEntry((centerLocalIndex + 2) % element.getSize());
+            // save the target vertex, which is part of the ring
+            vertexRing.add(element.getEntry((centerLocalIndex + 1) % element.getSize()));
 
-            // get the other opposite vertex
-            int nextI = (i + 1) % elements.getSize();
-            int nextElementIndex = elements.getEntry(nextI);
-            int nextCenterLocalIndex = mainIndices.getEntry(nextI);
-            PiVector nextElement = m_triangulated.getElement(nextElementIndex);
-            int otherBIndex = nextElement.getEntry((nextCenterLocalIndex + 1) % nextElement.getSize());
-
-            if (!closed && (i == 0 || i + 1 == elements.getSize())) {
-
-                PsDebug.message("oh dear, skip because we are on the boundary");
-                // apparently we are dealing with a non-closed star and an opposing vertex to A does not exist.
-                continue;
+            // save center vertex index
+            if (i == 0) {
+                centerIndex = element.getEntry(centerLocalIndex);
             }
 
+            // check if ring is closed
+            if (i + 1 == elements.getSize()) {
+                int closingVertexIndex = element.getEntry((centerLocalIndex + 2) % element.getSize());
+                closed = vertexRing.get(0) == closingVertexIndex;
+                // if star is not closed, then add the final vertex as well, as it is still unique
+                if (!closed) vertexRing.add(closingVertexIndex);
+            }
+        }
+
+        // lets return zero when we are on the boundary
+        if (!closed) return curvature;
+
+        // initialize next loop
+        int size = vertexRing.size();
+        PdVector centerVertex = m_triangulated.getVertex(centerIndex);
+
+        // loop over each element in the star
+        for (int i = 0; i < size; i++) {
+
+            // get all vertex indices required
+            int currentIndex = vertexRing.get(i);
+            int otherAIndex = vertexRing.get((i + size + 1) % size);
+            int otherBIndex = vertexRing.get((i + size - 1) % size);
+
             // get the actual vertex locations
-            PdVector centerVertex = m_triangulated.getVertex(centerIndex);
             PdVector currentVertex = m_triangulated.getVertex(currentIndex);
             PdVector otherAVertex = m_triangulated.getVertex(otherAIndex);
             PdVector otherBVertex = m_triangulated.getVertex(otherBIndex);
-
-            //PsDebug.message("--------------------------------------------------");
-            //PsDebug.message(centerVertex.toShortString() + " ~ " + currentVertex.toShortString() + " ~ " + otherAVertex.toShortString() + " ~ " + otherBVertex.toShortString());
 
             // calculate the curvature as shown on slides
             PdVector temp = PdVector.subNew(centerVertex, currentVertex);
             double angleA = Math.toRadians(PdVector.angle(otherAVertex, centerVertex, currentVertex));
             double angleB = Math.toRadians(PdVector.angle(otherBVertex, centerVertex, currentVertex));
-            //PsDebug.message("temp = " + temp.toShortString() );
-            PsDebug.message("A = " + angleA + "; B = " + angleB + "; cotA = " + (1.0 / Math.tan(angleA)) + "; cotB = " + (1.0 / Math.tan(angleB)));
             temp.multScalar(1.0 / Math.tan(angleA) + 1.0 / Math.tan(angleB));
 
             if (angleA == 0.0 || angleB == 0.0) {
@@ -170,8 +167,7 @@ public class Task2 extends PjWorkshop {
                 continue;
             }
 
-
-                // add to curvature
+            // add to curvature
             curvature.add(temp);
         }
 

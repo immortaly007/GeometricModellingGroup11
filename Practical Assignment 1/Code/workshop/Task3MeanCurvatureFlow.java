@@ -33,4 +33,13 @@ public class Task3MeanCurvatureFlow extends PjWorkshop {
     public void init() {
         super.init();
     }
+
+    public void apply(double stepwidth)
+    {
+        // Triangulate the geometry
+        PgElementSet.triangulate(m_geom);
+
+        // Calculate the mean curvature for every vertex
+        ArrayList<PdVector> meanCurvatures = EverythingHelper.calculateMeanCurvatures(m_geom);
+    }
 }

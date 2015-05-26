@@ -5,6 +5,7 @@ import jv.object.PsDebug;
 import jv.vecmath.PdVector;
 import jv.vecmath.PiVector;
 import jvx.geom.PgVertexStar;
+import util.Util;
 
 import java.math.BigDecimal;
 import java.math.MathContext;
@@ -69,13 +70,10 @@ public class EverythingHelper {
         return "min=" + EverythingHelper.min(values) + ", max=" + EverythingHelper.max(values) + ", mean=" + EverythingHelper.mean(values).setScale(8, RoundingMode.HALF_UP) + ", std=" + EverythingHelper.std(values).setScale(8, RoundingMode.HALF_UP);
     }
 
-    public static SimpleVertexStar[] makeVertexStars(PgElementSet geom)
-    {
+    public static SimpleVertexStar[] makeVertexStars(PgElementSet geom) {
         SimpleVertexStar[] vertexStars = new SimpleVertexStar[geom.getVertices().length];
-        for (PiVector elem : geom.getElements())
-        {
-            for (int i = 0; i < elem.getSize(); i++)
-            {
+        for (PiVector elem : geom.getElements()) {
+            for (int i = 0; i < elem.getSize(); i++) {
                 int curVertex = elem.getEntry(i);
                 if (vertexStars[curVertex] == null) {
                     vertexStars[curVertex] = new SimpleVertexStar(curVertex, geom);
@@ -92,6 +90,19 @@ public class EverythingHelper {
             }
         }
         return vertexStars;
+    }
+
+    public static ArrayList<PdVector> calculateMeanCurvatures(PgElementSet geom)
+    {
+        ArrayList<PdVector> meanCurvatures = new ArrayList<>();
+        PgVertexStar[] stars = Util.getVertexStars(geom);
+
+        for (int i = 0; i < stars.length; i++) {
+            PgVertexStar star = stars[i];
+            PdVector curvature = EverythingHelper.meanCurvature(star, geom);
+            meanCurvatures.add(curvature);
+        }
+        return meanCurvatures;
     }
 
     public static PdVector meanCurvature(PgVertexStar star, PgElementSet geom) {

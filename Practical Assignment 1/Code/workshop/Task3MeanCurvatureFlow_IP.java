@@ -1,5 +1,6 @@
 package workshop;
 
+import jv.number.PuDouble;
 import jv.object.PsUpdateIf;
 import jvx.project.PjWorkshop_IP;
 
@@ -11,7 +12,8 @@ import java.awt.event.ActionListener;
  * Created by Immortaly007 on 20-5-2015.
  */
 public class Task3MeanCurvatureFlow_IP extends PjWorkshop_IP implements ActionListener {
-    protected Button m_apply;
+    protected Button m_bApply;
+    protected PuDouble m_xStepwidth;
 
     Task3MeanCurvatureFlow m_ws;
 
@@ -36,9 +38,15 @@ public class Task3MeanCurvatureFlow_IP extends PjWorkshop_IP implements ActionLi
 
         addSubTitle("Mean Curvature Flow");
 
-        m_apply = new Button("Apply");
-        m_apply.addActionListener(this);
-        add(m_apply);
+        m_xStepwidth = new PuDouble("Stepwidth (tau)");
+        m_xStepwidth.setDefBounds(0, 1.0, 0.01, 0.1);
+        m_xStepwidth.addUpdateListener(this);
+        m_xStepwidth.init();
+        add(m_xStepwidth.getInfoPanel());
+
+        m_bApply = new Button("Apply");
+        m_bApply.addActionListener(this);
+        add(m_bApply);
 
         validate();
     }
@@ -50,7 +58,9 @@ public class Task3MeanCurvatureFlow_IP extends PjWorkshop_IP implements ActionLi
 
     public void actionPerformed(ActionEvent event) {
         Object source = event.getSource();
-        if (source == m_apply) {
+        if (source == m_bApply) {
+            m_ws.apply(m_xStepwidth.getValue());
+            m_ws.m_geom.update(m_ws.m_geom);
             return;
         }
     }

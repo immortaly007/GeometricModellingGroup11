@@ -37,12 +37,13 @@ public class Task1 extends PjWorkshop{
     }
 
     public void calculate(JTable table) {
-        // Calculate all shape regularities
+        // Calculate everything
         Collection<Double> shapeRegularities = calculateShapeRegularities(m_geom);
         Collection<Integer> valences = calculateValences(m_geom);
 		Collection<Double> angles = calculateTriangleAngles(m_geom);
 		Collection<Double> edgeLengths = calculateEdgeLengths(m_geom);
 
+        // Put the results in the table
         TableModel model = table.getModel();
 
         model.setValueAt(EverythingHelper.min(shapeRegularities), 0, 1);
@@ -86,17 +87,24 @@ public class Task1 extends PjWorkshop{
 
     }
 
+    /**
+     * Calculates the shape regularities for all triangles in the geometry
+     * @param set Geometry (should be triangulated)
+     * @return Collection of douvles representing the shape regularities of all triangles
+     */
     private static Collection<Double> calculateShapeRegularities(PgElementSet set)
     {
         ArrayList<Double> shapeRegularities = new ArrayList<Double>();
 
         int n = set.getNumElements();
         for (int i = 0; i < n; i++) {
+            // Extract the triangle
             PiVector e = set.getElement(i);
 
             PdVector v1 = set.getVertex(e.getEntry(0));
             PdVector v2 = set.getVertex(e.getEntry(1));
             PdVector v3 = set.getVertex(e.getEntry(2));
+            // Calculate it's shape regularity
             double sr = calculateShapeRegularity(v1, v2, v3);
             shapeRegularities.add(sr);
         }
@@ -104,6 +112,15 @@ public class Task1 extends PjWorkshop{
         return shapeRegularities;
     }
 
+    /**
+     * Calculates the shape regularity of a triangle by dividing the diameter of the inscribed circle by the of the
+     * circumscribed circle.
+     *
+     * @param v1 First vertex of the triangle
+     * @param v2 Second vertex of the triangle
+     * @param v3 Third vertex of the triangle
+     * @return Shape regularity
+     */
     private static double calculateShapeRegularity(PdVector v1, PdVector v2, PdVector v3) {
 		PdVector cache = new PdVector();
 		cache.sub(v2, v1); double a = cache.length();
@@ -113,17 +130,28 @@ public class Task1 extends PjWorkshop{
 		return 4.0*(s - a)*(s - b)*(s - c)/(a*b*c);
     }
 
+    /**
+     * Calculate the valences
+     * @param set The geometry (should be triangulated)
+     * @return
+     */
     private static Collection<Integer> calculateValences(PgElementSet set)
     {
         ArrayList<Integer> valences = new ArrayList<Integer>();
         PgVertexStar[] edgeStars = Util.getVertexStars(set);
         for (PgVertexStar star : edgeStars)
         {
-            valences.add(star.getSize() - 1);
+            // The valence is equal to the number of edges minus 1 (assuming the geometry is closed)
+            valences.add(star.getLink().getSize() - 1);
         }
         return valences;
     }
 
+    /**
+     * Calculates the angles (in radians) of all edges in the geometry
+     * @param set Geometry (should be triangulated)
+     * @return A collections of all angles (3 * m)
+     */
     private static Collection<Double> calculateTriangleAngles(PgElementSet set)
     {
         ArrayList<Double> angles = new ArrayList<Double>();
@@ -131,11 +159,14 @@ public class Task1 extends PjWorkshop{
         int n = set.getNumElements();
         double[] res = new double[3];
         for (int i = 0; i < n; i++) {
+            // Extract the triangle vertices
             PiVector e = set.getElement(i);
 
             PdVector v1 = set.getVertex(e.getEntry(0));
             PdVector v2 = set.getVertex(e.getEntry(1));
             PdVector v3 = set.getVertex(e.getEntry(2));
+
+            // Calculate the angles and add them to the angle collection
             PdVector.angle(res, v1, v2, v3);
             for (double r : res)
                 angles.add(r);
@@ -144,17 +175,25 @@ public class Task1 extends PjWorkshop{
         return angles;
     }
 
+    /**
+     * Calculates the edge length of all edges in the geometry (requires the geometry to be triangulated)
+     * @param set The geometry to process (should be traingulated)
+     * @return A collection containing the edge length of all edges
+     */
     private static Collection<Double> calculateEdgeLengths(PgElementSet set)
     {
         ArrayList<Double> edgeLengths = new ArrayList<Double>();
 
         int n = set.getNumElements();
         double[] res = new double[3];
+        // Go through all elements
         for (int i = 0; i < n; i++) {
+            // Extract the vertices of the triangle
             PiVector e = set.getElement(i);
             PdVector v1 = set.getVertex(e.getEntry(0));
             PdVector v2 = set.getVertex(e.getEntry(1));
             PdVector v3 = set.getVertex(e.getEntry(2));
+            // Calculate the edge length of all edges in the triangle and add them to the results
             edgeLengths.add(PdVector.subNew(v2, v1).length());
             edgeLengths.add(PdVector.subNew(v3, v2).length());
             edgeLengths.add(PdVector.subNew(v1, v3).length());

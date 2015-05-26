@@ -39,11 +39,16 @@ public class Task3IterativeAveraging extends PjWorkshop {
     {
         // For each vertex, calculate the average position of it's neighbors
         // Then subtract this average from the current vertex position
+        // This gives a vector that moves the current vertex towards the average of it's neighbors.
+        // This vector is then multiplied by the stepwidth and added to the current position
+
+        // Calculate the vertex stars (for easy access to neighbors)
         SimpleVertexStar[] stars =  EverythingHelper.makeVertexStars(m_geom);
         PdVector[] vertexOffsets = new PdVector[m_geom.getVertices().length];
         for (SimpleVertexStar star : stars)
         {
             PdVector center = star.getCenter();
+            // Calculate the average position of all neighbors
             ArrayList<Double> xCoords = new ArrayList<Double>();
             ArrayList<Double> yCoords = new ArrayList<Double>();
             ArrayList<Double> zCoords = new ArrayList<Double>();
@@ -57,9 +62,11 @@ public class Task3IterativeAveraging extends PjWorkshop {
                     EverythingHelper.mean(yCoords).doubleValue(),
                     EverythingHelper.mean(zCoords).doubleValue()
             );
+            // Subtract the current vertex position from this mean.
             vertexOffsets[star.getCenterVertex()] = PdVector.subNew(mean, center);
         }
 
+        // Move all vertices towards the average position
         for (int i = 0; i < m_geom.getVertices().length; i++) {
             PdVector scaledOffset = vertexOffsets[i];
             if (scaledOffset == null) continue;

@@ -43,26 +43,26 @@ public class Task3MeanCurvatureFlow extends PjWorkshop {
         // Triangulate the geometry
         PgElementSet.triangulate(m_geom);
 
-        // Calculate the mean curvature for every vertex
-        //ArrayList<PdVector> meanCurvatures = EverythingHelper.calculateMeanCurvatures(m_geom);
-
-        // Calculate the inverse lumped mass matrix:
+        // Calculate the inverse lumped mass matrix (M^{-1}):
         PdVector v_MInv =  PnMassMatrix.getInvLumpedMassMatrix(m_geom, null);
-        PnSparseMatrix Minv = new PnSparseMatrix(m_geom.getNumVertices(), m_geom.getNumVertices());
-        Minv.addDiagonal(v_MInv);
+        PnSparseMatrix MInv = new PnSparseMatrix(m_geom.getNumVertices(), m_geom.getNumVertices());
+        MInv.addDiagonal(v_MInv);
 
         // Calculate the stiffness matrix (S)
         PnStiffDiriConforming S = new PnStiffDiriConforming(m_geom);
 
-        // Calculate the laplace matrix: L = M^-1 S
-        PnSparseMatrix L =  PnSparseMatrix.multMatrices(Minv, S, null);
+        // Calculate the laplace matrix: L = M^{-1} S
+        PnSparseMatrix L =  PnSparseMatrix.multMatrices(MInv, S, null);
 
-        L.multScalar(tau); // L = \tau L
-        // This has to be done for each axis
+        // Multiply the laplace matrix by the stepwidth (tau)
+        L.multScalar(tau);
+
+        // Calculate the movement for each direction
         PdVector[] res = new PdVector[m_geom.getNumVertices()];
         for (int i = 0; i < m_geom.getNumVertices(); i++) res[i] = new PdVector(3);
 
         for (int axis = 0; axis < 3; axis++) {
+            // Create vector x (containing the current axis coordinate for each vertex)
             PdVector x = new PdVector(m_geom.getNumVertices());
             for (int i = 0; i < m_geom.getNumVertices(); i++) {
                 x.setEntry(i, m_geom.getVertex(i).getEntry(axis));
@@ -70,6 +70,7 @@ public class Task3MeanCurvatureFlow extends PjWorkshop {
             // Set x = x - \tau L x
             x.sub(L.leftMultMatrix(null, x));
 
+            // Update res to contain these entries
             for (int i = 0; i < m_geom.getNumVertices(); i++)
                 res[i].setEntry(axis, x.getEntry(i));
         }

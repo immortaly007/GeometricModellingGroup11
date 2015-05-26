@@ -157,7 +157,7 @@ public class Task2 extends PjWorkshop {
             temp.multScalar(1.0 / Math.tan(angleA) + 1.0 / Math.tan(angleB));
 
             if (angleA == 0.0 || angleB == 0.0) {
-                PsDebug.message("oh dear, some angles were equal to 0, which would result in infinity, skipping vertice");
+                //PsDebug.message("oh dear, some angles were equal to 0, which would result in infinity, skipping vertice");
                 continue;
             }
 

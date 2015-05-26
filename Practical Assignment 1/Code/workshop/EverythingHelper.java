@@ -71,7 +71,7 @@ public class EverythingHelper {
     }
 
     public static SimpleVertexStar[] makeVertexStars(PgElementSet geom) {
-        SimpleVertexStar[] vertexStars = new SimpleVertexStar[geom.getVertices().length];
+        SimpleVertexStar[] vertexStars = new SimpleVertexStar[geom.getNumVertices()];
         for (PiVector elem : geom.getElements()) {
             for (int i = 0; i < elem.getSize(); i++) {
                 int curVertex = elem.getEntry(i);

@@ -142,7 +142,7 @@ public class Task1 extends PjWorkshop{
         for (PgVertexStar star : edgeStars)
         {
             // The valence is equal to the number of edges minus 1 (assuming the geometry is closed)
-            valences.add(star.getLink().getSize() - 1);
+            valences.add(star.getLink().getSize());
         }
         return valences;
     }

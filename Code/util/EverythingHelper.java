@@ -92,5 +92,10 @@ public class EverythingHelper {
         return vertexStars;
     }
 
+    public static SimpleTriangle getTriangle(PgElementSet m_geom, int i)
+    {
+        PiVector elem = m_geom.getElement(i);
+        return new SimpleTriangle(m_geom.getVertex(elem.getEntry(0)), m_geom.getVertex(elem.getEntry(1)), m_geom.getVertex(elem.getEntry(2)));
+    }
 
 }

@@ -53,7 +53,7 @@ public class Task1_IP extends PjWorkshop_IP implements ActionListener {
     public void actionPerformed(ActionEvent event) {
         Object source = event.getSource();
         if (source == m_bCalculate) {
-            m_ws.calculate();
+            m_ws.calculate(1);
             return;
         }
     }

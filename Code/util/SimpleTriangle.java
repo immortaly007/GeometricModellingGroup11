@@ -63,7 +63,7 @@ public class SimpleTriangle {
      */
     public double angle(int i)
     {
-        return PdVector.angle(get(i), get((i + 1) % 3), get((i + 2) % 3));
+        return PdVector.angle(get(i), get((i + 1) % 3), get((i + 2) % 3)) * (Math.PI / 180);
     }
 
     /**
@@ -115,10 +115,14 @@ public class SimpleTriangle {
 
     public PdMatrix gradientMatrix()
     {
-        PdVector[] eCotA = edgeDescriptors();
+        // Get the angles at the triangles
         double[] a = angles();
+
+        PdVector[] eCotA = edgeDescriptors();
+        for (int i = 0; i < 3; i++) { eCotA[i].multScalar(1.0 / Math.tan(a[i])); }
+
+
         PdVector[] R90e = new PdVector[3];
-        for (int i = 0; i < 3; i++) { eCotA[i].multScalar(1 / Math.tan(a[i])); }
         for (int i =0; i < 3; i++) {
             int v1 = (i + 1) % 3;
             int v2 = (i + 2) % 3;

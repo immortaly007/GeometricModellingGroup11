@@ -9,17 +9,17 @@ import jv.project.PvDisplayIf;
 import jv.project.PvViewerIf;
 import jvx.project.PjWorkshop;
 import jvx.project.PjWorkshop_Dialog;
-import workshop.*;
-import workshop.Assignment1.Task1;
-import workshop.Assignment1.Task2;
-import workshop.Assignment1.Task3IterativeAveraging;
-import workshop.Assignment1.Task3MeanCurvatureFlow;
+import workshop.Assignment1.*;
+import workshop.Assignment2.*;
 
 public class PgElementSet_Menu extends PgPointSet_Menu {
-	
+
+    //********************************************************************
+    //WARNING: Don't give two menu items the same name, even in different sub menu's!
+    //********************************************************************
 	private enum Assignment1{
-		Task1                   ("Task 1..."),
-		Task2                   ("Task 2..."),
+		Task1                   ("Task 1 (Mesh statistics)"),
+		Task2                   ("Task 2 (Mean Curvature)"),
 		Task3IterativeAveraging ("Task 3 (Iterative Averaging)..."),
 		Task3MeanCurvatureFlow  ("Task 3 (Mean Curvature Flow)..."),
 		// Additional entries...
@@ -88,29 +88,41 @@ public class PgElementSet_Menu extends PgPointSet_Menu {
 			if (currDisp == null) PsDebug.warning("missing display.");
 		}
 
-		Assignment1 entry = Assignment1.fromName(aMethod);
-		if(entry == null) return false;
-		switch (entry) {
-			case Task1:
-				ShowShizzle(currDisp, new Task1());
-				break;
-			case Task2:
-				ShowShizzle(currDisp, new Task2());
-				break;
-			case Task3IterativeAveraging:
-				ShowShizzle(currDisp, new Task3IterativeAveraging());
-				break;
-			case Task3MeanCurvatureFlow:
-				ShowShizzle(currDisp, new Task3MeanCurvatureFlow());
-				break;
-			// Additional entries...
-
-		}
+		Assignment1 assignment1Entry = Assignment1.fromName(aMethod);
+        Assignment2 assignment2Entry = Assignment2.fromName(aMethod);
+		if(assignment1Entry != null)
+        {
+            switch (assignment1Entry) {
+                case Task1:
+                    ShowWorkshopWindow(currDisp, new workshop.Assignment1.Task1());
+                    break;
+                case Task2:
+                    ShowWorkshopWindow(currDisp, new workshop.Assignment1.Task2());
+                    break;
+                case Task3IterativeAveraging:
+                    ShowWorkshopWindow(currDisp, new workshop.Assignment1.Task3IterativeAveraging());
+                    break;
+                case Task3MeanCurvatureFlow:
+                    ShowWorkshopWindow(currDisp, new workshop.Assignment1.Task3MeanCurvatureFlow());
+                    break;
+            }
+        }
+        if (assignment2Entry != null)
+        {
+            switch (assignment2Entry) {
+                case Task1:
+                    ShowWorkshopWindow(currDisp, new workshop.Assignment2.Task1());
+                    break;
+                case Task2:
+                    ShowWorkshopWindow(currDisp, new workshop.Assignment2.Task2());
+                    break;
+            }
+        }
 		
 		return true;
 	}
 
-	public void ShowShizzle(PvDisplayIf currDisp, PjWorkshop toshow) {
+	public void ShowWorkshopWindow(PvDisplayIf currDisp, PjWorkshop toshow) {
 		toshow.setGeometry(m_elementSet);
 		if (currDisp == null) {
 			if (PsDebug.WARNING) PsDebug.warning("missing display.");

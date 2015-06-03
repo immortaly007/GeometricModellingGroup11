@@ -1,4 +1,4 @@
-package workshop;
+package util;
 
 import jv.geom.PgElementSet;
 import jv.vecmath.PdVector;

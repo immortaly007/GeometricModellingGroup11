@@ -4,8 +4,8 @@ import jv.geom.PgElementSet;
 import jv.project.PgGeometry;
 import jv.vecmath.PdVector;
 import jvx.project.PjWorkshop;
-import workshop.EverythingHelper;
-import workshop.SimpleVertexStar;
+import util.EverythingHelper;
+import util.SimpleVertexStar;
 
 import java.util.ArrayList;
 

@@ -8,7 +8,7 @@ import jv.vecmath.PiVector;
 import jvx.geom.PgVertexStar;
 import jvx.project.PjWorkshop;
 import util.Util;
-import workshop.EverythingHelper;
+import util.EverythingHelper;
 
 import java.util.ArrayList;
 

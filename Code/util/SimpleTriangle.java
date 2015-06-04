@@ -118,18 +118,23 @@ public class SimpleTriangle {
         // Get the angles at the triangles
         double[] a = angles();
 
+        // First get the edge descriptors (e0 = p3 - p2, e1 = p1 - p3, e2 = p2 - p3)
         PdVector[] eCotA = edgeDescriptors();
+        // Multiply them but the cot of the angles
         for (int i = 0; i < 3; i++) { eCotA[i].multScalar(1.0 / Math.tan(a[i])); }
 
-
+        // Calculate e rotated by 90 degrees.
         PdVector[] R90e = new PdVector[3];
         for (int i =0; i < 3; i++) {
             int v1 = (i + 1) % 3;
             int v2 = (i + 2) % 3;
             R90e[i] = PdVector.subNew(eCotA[v1], eCotA[v2]);
         }
+
+        // Build the matrix
         PdMatrix res = new PdMatrix(3, 3);
         res.setRows(R90e);
+        // Multiply by 1.0 / 2.0 * area(T).
         res.multScalar(1.0 / (2.0 * area()));
         return res;
     }

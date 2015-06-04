@@ -3,7 +3,7 @@
 <jvx-model>
 	<geometries>
 		<geometry name="Icosahedron">
-			<pointSet point="hide" dim="3">
+			<pointSet point="show" dim="3">
 				<points num="3">
 					<p>-0.523035431787524 0.47469363581230717 0.43626328291805</p>
 					<p>0.5281907512364837 0.4929684972184806 0.44892839197238144</p>
@@ -11,22 +11,24 @@
 					<thickness>2.0</thickness>
 					<color type="rgb">255 0 0</color>
 					<colorTag type="rgb">255 0 255</colorTag>
+					<labelAtt font="fixed" horAlign="head" verAlign="bottom" visible="show">
+						<xOffset>0</xOffset>
+						<yOffset>0</yOffset>
+						<color type="rgb">0 0 0</color>
+					</labelAtt>
 				</points>
-				<normals num="3">
-					<n>0.0193658540658736 -0.523766253030699 -0.8516418706724563</n>
-					<n>0.019365854065873604 -0.523766253030699 -0.8516418706724563</n>
-					<n>0.019365854065873624 -0.523766253030699 -0.8516418706724563</n>
-					<thickness>1.0</thickness>
-					<length>0.5</length>
-					<color type="rgb">255 255 0</color>
-				</normals>
 			</pointSet>
 			<faceSet edge="show" face="show">
 				<faces num="1">
-					<f>0 2 1</f>
+					<f>0 1 2</f>
 					<color type="rgb">150 220 255</color>
 					<colorTag type="rgb">255 0 255</colorTag>
 					<creaseAngle>3.2</creaseAngle>
+					<labelAtt font="fixed" horAlign="center" verAlign="middle" visible="show">
+						<xOffset>0</xOffset>
+						<yOffset>0</yOffset>
+						<color type="rgb">255 200 0</color>
+					</labelAtt>
 				</faces>
 				<neighbours num="1">
 					<nb>-1 -1 -1</nb>
@@ -35,27 +37,26 @@
 					<thickness>1.0</thickness>
 					<color type="rgb">0 0 0</color>
 					<colorTag type="rgb">255 0 255</colorTag>
+					<labelAtt font="fixed" horAlign="head" verAlign="bottom" visible="show">
+						<xOffset>4</xOffset>
+						<yOffset>4</yOffset>
+						<color type="rgb">0 0 0</color>
+					</labelAtt>
 				</edges>
-				<normals num="1">
-					<n>0.01936585406587361 -0.5237662530306991 -0.8516418706724563</n>
-					<thickness>1.0</thickness>
-					<length>0.5</length>
-					<color type="rgb">255 255 0</color>
-				</normals>
 			</faceSet>
-			<vectorField vector="hide" name="Gradient of function" material="hide" base="element">
-				<vectors num="1">
-					<v>4.730924121045354 4.689535793243718 -4.656250678186329</v>
-					<thickness>1.0</thickness>
-					<length>1.0</length>
-					<color type="rgb">255 255 0</color>
-				</vectors>
-			</vectorField>
 			<vectorField vector="hide" name="function" material="hide" base="vertex">
 				<vectors num="3">
 					<v>-3.0</v>
 					<v>2.0</v>
 					<v>4.0</v>
+					<thickness>1.0</thickness>
+					<length>1.0</length>
+					<color type="rgb">255 255 0</color>
+				</vectors>
+			</vectorField>
+			<vectorField vector="hide" name="Gradient of function" material="hide" base="element">
+				<vectors num="1">
+					<v>4.730924121045354 4.689535793243718 -4.65625067818633</v>
 					<thickness>1.0</thickness>
 					<length>1.0</length>
 					<color type="rgb">255 255 0</color>

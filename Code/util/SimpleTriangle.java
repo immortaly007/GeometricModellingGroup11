@@ -85,7 +85,7 @@ public class SimpleTriangle {
      */
     public SimpleEdge edge(int i)
     {
-        return new SimpleEdge(get(i), get((i + 1) % 3));
+        return new SimpleEdge(get((i + 1) % 3), get((i + 2) % 3));
     }
 
     public SimpleEdge[] edges()
@@ -100,7 +100,7 @@ public class SimpleTriangle {
 
     public PdVector edgeDescriptor(int i)
     {
-        return PdVector.subNew(get((i + 1) % 3), get(i));
+        return PdVector.subNew(get((i + 2) % 3), get((i + 1) % 3));
     }
 
     public PdVector[] edgeDescriptors()

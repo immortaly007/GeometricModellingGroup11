@@ -135,7 +135,7 @@ public class SimpleTriangle {
 
         // Build the matrix
         PdMatrix res = new PdMatrix(3, 3);
-        res.setRows(R90e);
+        res.setColumns(R90e);
         // Multiply by 1.0 / 2.0 * area(T).
         res.multScalar(1.0 / (2.0 * area()));
         return res;

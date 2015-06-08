@@ -42,9 +42,18 @@ public class Task1 extends PjWorkshop{
 
     public void reset()
     {
+
     }
 
-    public void calculate(String valuesName, String checkName) {
+    public String[] getVectorFieldNames()
+    {
+        String[] vectorFieldNames = new String[m_geom.getNumVectorFields()];
+        for (int i = 0; i < m_geom.getNumVectorFields(); i++)
+            vectorFieldNames[i] = m_geom.getVectorField(i).getName();
+        return vectorFieldNames;
+    }
+
+    public void calculate(String valuesName, String checkName, String resultName) {
         // If it doesn't yet exist, build the gradient matrices
         if (m_gradientMatrix == null) {
             m_gradientMatrix = new PnSparseMatrix(m_geom.getNumElements() * 3, m_geom.getNumVertices(), 3);
@@ -71,18 +80,30 @@ public class Task1 extends PjWorkshop{
         for (int i = 0; i < values.getSize(); i++)
             values.setEntry(i, functionValuesVectorField.getVector(i).getEntry(0));
 
-        PdVector grad = PnSparseMatrix.rightMultVector(m_gradientMatrix, values, null);
+        PdVector grads = PnSparseMatrix.rightMultVector(m_gradientMatrix, values, null);
 
-        // Hack to check the solution
-        PgVectorField answers = m_geom.getVectorField(checkName);
-        for (int i = 0; i < grad.getSize(); i++)
-        {
-            PsDebug.message("Our answer: " + grad.getEntry(i) + ", expected: " + answers.getVector(i / 3).getEntry(i % 3));
+        // If a check vector is given, use it to check our solution:
+        if (checkName != "") {
+            PgVectorField answers = m_geom.getVectorField(checkName);
+            for (int i = 0; i < grads.getSize(); i++) {
+                PsDebug.message("Our answer: " + grads.getEntry(i) + ", expected: " + answers.getVector(i / 3).getEntry(i % 3));
+            }
         }
+
+        if (resultName != "") {
+            PgVectorField result = new PgVectorField(3, PgVectorField.ELEMENT_BASED);
+            result.setNumVectors(m_geom.getNumElements());
+            result.setName(resultName);
+            result.showVectorArrows(true);
+            for (int i = 0; i < m_geom.getNumElements(); i++)
+                result.setVector(i, grads.getEntry(i * 3), grads.getEntry(i * 3 + 1), grads.getEntry(i * 3 + 2));
+            m_geom.addVectorField(result);
+        }
+        m_geom.update(m_geom);
     }
 
-    public PdVector getEdge(PiVector elem, int a, int b) {
-        return PdVector.subNew(m_geom.getVertex(elem.getEntry(b)), m_geom.getVertex(elem.getEntry(a)));
+    void showVectorField(String name) {
+        m_geom.selectVectorField(m_geom.getVectorField(name));
     }
 
 

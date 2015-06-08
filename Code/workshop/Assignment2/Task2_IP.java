@@ -13,7 +13,6 @@ import java.awt.event.ActionListener;
  */
 public class Task2_IP extends PjWorkshop_IP implements ActionListener {
     protected Button m_bCalculate;
-    protected Button m_bColor;
     protected JTable m_tAnalysis;
     Task2 m_ws;
 
@@ -38,6 +37,17 @@ public class Task2_IP extends PjWorkshop_IP implements ActionListener {
 
         addSubTitle("Mesh Analysis");
 
+        String[] columns = { "c1", "c2", "c3" };
+        Object[][] data = {
+                { 0, 0, 0 },
+                { 0, 0, 0 },
+                { 0, 0, 0 }
+        };
+        m_tAnalysis = new JTable(data, columns);
+        //m_tAnalysis.setFillsViewportHeight(true);
+        JScrollPane scrollPane = new JScrollPane(m_tAnalysis);
+        add(scrollPane);
+
         m_bCalculate = new Button("Calculate...");
         m_bCalculate.addActionListener(this);
         add(m_bCalculate);
@@ -53,7 +63,7 @@ public class Task2_IP extends PjWorkshop_IP implements ActionListener {
     public void actionPerformed(ActionEvent event) {
         Object source = event.getSource();
         if (source == m_bCalculate) {
-            m_ws.calculate();
+            m_ws.calculate(m_tAnalysis);
             return;
         }
     }

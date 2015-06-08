@@ -47,22 +47,7 @@ public class Task1 extends PjWorkshop{
     public void calculate(String valuesName, String checkName) {
         // If it doesn't yet exist, build the gradient matrices
         if (m_gradientMatrix == null) {
-            m_gradientMatrix = new PnSparseMatrix(m_geom.getNumElements() * 3, m_geom.getNumVertices(), 3);
-            for (int i = 0; i < m_geom.getNumElements(); i++)
-            {
-                // Get the triangle and calculate it's 3x3 gradient matrix
-                SimpleTriangle triangle = EverythingHelper.getTriangle(m_geom, i);
-                PdMatrix mat = triangle.gradientMatrix();
-
-                // Put the values into the sparse matrix:
-                PiVector elem = m_geom.getElement(i);
-                for (int v = 0; v < 3; v ++)
-                {
-                    int col = elem.getEntry(v); // Get the vertex index
-                    for (int row = 0; row < 3; row++)
-                        m_gradientMatrix.setEntry(i * 3 + row, col, mat.getEntry(row, v));
-                }
-            }
+            m_gradientMatrix = EverythingHelper.GetGradientMatrix(m_geom);
         }
 
         PgVectorField functionValuesVectorField = m_geom.getVectorField(valuesName);

@@ -2,9 +2,11 @@ package util;
 
 import jv.geom.PgElementSet;
 import jv.object.PsDebug;
+import jv.vecmath.PdMatrix;
 import jv.vecmath.PdVector;
 import jv.vecmath.PiVector;
 import jvx.geom.PgVertexStar;
+import jvx.numeric.PnSparseMatrix;
 import util.Util;
 
 import java.math.BigDecimal;
@@ -96,6 +98,27 @@ public class EverythingHelper {
     {
         PiVector elem = m_geom.getElement(i);
         return new SimpleTriangle(m_geom.getVertex(elem.getEntry(0)), m_geom.getVertex(elem.getEntry(1)), m_geom.getVertex(elem.getEntry(2)));
+    }
+
+    public static PnSparseMatrix GetGradientMatrix(PgElementSet geom)
+    {
+        PnSparseMatrix gradientMatrix = new PnSparseMatrix(geom.getNumElements() * 3, geom.getNumVertices(), 3);
+        for (int i = 0; i < geom.getNumElements(); i++)
+        {
+            // Get the triangle and calculate it's 3x3 gradient matrix
+            SimpleTriangle triangle = EverythingHelper.getTriangle(geom, i);
+            PdMatrix mat = triangle.gradientMatrix();
+
+            // Put the values into the sparse matrix:
+            PiVector elem = geom.getElement(i);
+            for (int v = 0; v < 3; v ++)
+            {
+                int col = elem.getEntry(v); // Get the vertex index
+                for (int row = 0; row < 3; row++)
+                    gradientMatrix.setEntry(i * 3 + row, col, mat.getEntry(row, v));
+            }
+        }
+        return gradientMatrix;
     }
 
 }

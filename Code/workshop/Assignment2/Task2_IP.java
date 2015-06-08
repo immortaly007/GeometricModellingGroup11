@@ -39,14 +39,14 @@ public class Task2_IP extends PjWorkshop_IP implements ActionListener {
 
         String[] columns = { "c1", "c2", "c3" };
         Object[][] data = {
-                { 0, 0, 0 },
-                { 0, 0, 0 },
-                { 0, 0, 0 }
+                { 1, 0, 0 },
+                { 0, 1, 0 },
+                { 0, 0, 1 }
         };
         m_tAnalysis = new JTable(data, columns);
         //m_tAnalysis.setFillsViewportHeight(true);
-        JScrollPane scrollPane = new JScrollPane(m_tAnalysis);
-        add(scrollPane);
+//        JScrollPane scrollPane = new JScrollPane(m_tAnalysis);
+        add(m_tAnalysis);
 
         m_bCalculate = new Button("Calculate...");
         m_bCalculate.addActionListener(this);

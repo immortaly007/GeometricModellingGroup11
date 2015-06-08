@@ -92,9 +92,21 @@ public class Task2 extends PjWorkshop{
 
         // get the prerequisites
         // get the diagonal mass matrix
-        PnMassMatrix mass = new PnMassMatrix(m_geom, true);
+        PnSparseMatrix mass = new PnSparseMatrix(m_geom.getNumElements() * 3, m_geom.getNumElements() * 3);
+        for (int i = 0; i < m_geom.getNumElements(); i++)
+        {
+            double area = EverythingHelper.getTriangle(m_geom, i).area();
+            mass.setEntry(i * 3, i * 3, area);
+            mass.setEntry(i * 3 + 1, i * 3 + 1, area);
+            mass.setEntry(i * 3 + 2, i * 3 + 2, area);
+        }
+
         // get the transposed gradient matrix
         PnSparseMatrix gradientMatrixTransposed = gradientMatrix.transposeNew();
+
+        PsDebug.message("gradientMatrixTransposed: " + EverythingHelper.getDimensionDescriber(gradientMatrixTransposed));
+        PsDebug.message("mass:                     " + EverythingHelper.getDimensionDescriber(mass));
+
 
         // get A, from Ax = b
         PnSparseMatrix GtMv = PnSparseMatrix.multMatrices(gradientMatrixTransposed, mass, new PnSparseMatrix());

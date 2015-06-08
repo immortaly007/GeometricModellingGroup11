@@ -6,6 +6,7 @@ import jv.vecmath.PdMatrix;
 import jv.vecmath.PdVector;
 import jv.vecmath.PiVector;
 import jvx.geom.PgVertexStar;
+import jvx.numeric.PnMatrix;
 import jvx.numeric.PnSparseMatrix;
 import util.Util;
 
@@ -119,6 +120,11 @@ public class EverythingHelper {
             }
         }
         return gradientMatrix;
+    }
+
+    public static String getDimensionDescriber(PnSparseMatrix matrix)
+    {
+        return "" + matrix.getNumRows() + "x" + matrix.getNumCols();
     }
 
 }

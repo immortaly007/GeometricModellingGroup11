@@ -134,9 +134,14 @@ public class Task2 extends PjWorkshop{
             PsDebug.message(e.toString());
         }
 
+        PdVector oldCenter = m_geom.getVertex(0);
+
         for (int i = 0; i < newx.getSize(); i++) {
             m_geom.setVertex(i, newx.getEntry(i), newy.getEntry(i), newz.getEntry(i));
         }
+
+        PdVector newCenter = m_geom.getVertex(0);
+        m_geom.translate(PdVector.subNew(oldCenter, newCenter)); // translate center back to old center
 
     }
 }

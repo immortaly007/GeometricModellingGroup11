@@ -13,6 +13,7 @@ import java.awt.event.ActionListener;
  */
 public class Task2_IP extends PjWorkshop_IP implements ActionListener {
     protected Button m_bCalculate;
+    protected Button m_reset;
     protected JTable m_tAnalysis;
     Task2 m_ws;
 
@@ -52,6 +53,10 @@ public class Task2_IP extends PjWorkshop_IP implements ActionListener {
         m_bCalculate.addActionListener(this);
         add(m_bCalculate);
 
+        m_reset = new Button("Reset...");
+        m_reset.addActionListener(this);
+        add(m_reset);
+
         validate();
     }
 
@@ -64,6 +69,11 @@ public class Task2_IP extends PjWorkshop_IP implements ActionListener {
         Object source = event.getSource();
         if (source == m_bCalculate) {
             m_ws.calculate(m_tAnalysis);
+            m_ws.m_geom.update(m_ws.m_geom);
+            return;
+        }
+        if (source == m_reset) {
+            m_ws.reset();
             m_ws.m_geom.update(m_ws.m_geom);
             return;
         }

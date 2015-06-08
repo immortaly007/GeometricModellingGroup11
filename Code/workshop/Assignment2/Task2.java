@@ -30,6 +30,7 @@ import java.util.HashSet;
  */
 public class Task2 extends PjWorkshop{
     PgElementSet m_geom;
+    PgElementSet m_geom_original;
 
     public Task2() {
         super("Task 2");
@@ -41,6 +42,11 @@ public class Task2 extends PjWorkshop{
         super.setGeometry(geom);
         m_geom = (PgElementSet) super.getGeometry();
         PgElementSet.triangulate(m_geom);
+        m_geom_original = (PgElementSet) m_geom.clone();
+    }
+
+    public void reset() {
+        m_geom.copy(m_geom_original);
     }
 
     public void init() {
@@ -128,9 +134,14 @@ public class Task2 extends PjWorkshop{
             PsDebug.message(e.toString());
         }
 
+        PdVector oldCenter = m_geom.getVertex(0);
+
         for (int i = 0; i < newx.getSize(); i++) {
             m_geom.setVertex(i, newx.getEntry(i), newy.getEntry(i), newz.getEntry(i));
         }
+
+        PdVector newCenter = m_geom.getVertex(0);
+        m_geom.translate(PdVector.subNew(oldCenter, newCenter)); // translate center back to old center
 
     }
 }

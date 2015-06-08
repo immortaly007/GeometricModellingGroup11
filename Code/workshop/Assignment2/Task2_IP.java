@@ -64,6 +64,7 @@ public class Task2_IP extends PjWorkshop_IP implements ActionListener {
         Object source = event.getSource();
         if (source == m_bCalculate) {
             m_ws.calculate(m_tAnalysis);
+            m_ws.m_geom.update(m_ws.m_geom);
             return;
         }
     }

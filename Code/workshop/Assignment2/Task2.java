@@ -9,6 +9,7 @@ import jv.vecmath.PdMatrix;
 import jv.vecmath.PdVector;
 import jv.vecmath.PiVector;
 import jvx.geom.PgVertexStar;
+import jvx.numeric.PnBiconjugateGradient;
 import jvx.numeric.PnMassMatrix;
 import jvx.numeric.PnSparseMatrix;
 import jvx.project.PjWorkshop;
@@ -104,10 +105,6 @@ public class Task2 extends PjWorkshop{
         // get the transposed gradient matrix
         PnSparseMatrix gradientMatrixTransposed = gradientMatrix.transposeNew();
 
-        PsDebug.message("gradientMatrixTransposed: " + EverythingHelper.getDimensionDescriber(gradientMatrixTransposed));
-        PsDebug.message("mass:                     " + EverythingHelper.getDimensionDescriber(mass));
-
-
         // get A, from Ax = b
         PnSparseMatrix GtMv = PnSparseMatrix.multMatrices(gradientMatrixTransposed, mass, new PnSparseMatrix());
         PnSparseMatrix GtMvG = PnSparseMatrix.multMatrices(GtMv, gradientMatrix, new PnSparseMatrix());
@@ -123,10 +120,10 @@ public class Task2 extends PjWorkshop{
         PdVector GtMvgz = PnSparseMatrix.rightMultVector(GtMv, gradz, null);
 
         try {
-            long factorization = dev6.numeric.PnMumpsSolver.factor(GtMvG, PnMumpsSolver.Type.GENERAL_SYMMETRIC);
-            dev6.numeric.PnMumpsSolver.solve(factorization, newx, GtMvgx);
-            dev6.numeric.PnMumpsSolver.solve(factorization, newy, GtMvgy);
-            dev6.numeric.PnMumpsSolver.solve(factorization, newz, GtMvgz);
+            jvx.numeric.PnBiconjugateGradient hmm = new PnBiconjugateGradient();
+            hmm.solve(GtMvG, newx, GtMvgx);
+            hmm.solve(GtMvG, newy, GtMvgy);
+            hmm.solve(GtMvG, newz, GtMvgz);
         } catch (Exception e) {
             PsDebug.message(e.toString());
         }

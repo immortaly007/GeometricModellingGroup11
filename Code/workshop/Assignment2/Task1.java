@@ -16,6 +16,8 @@ import util.SimpleTriangle;
 import util.Util;
 import util.EverythingHelper;
 
+import java.util.ArrayList;
+
 /**
  * Created by Immortaly007 on 16-5-2015.
  */
@@ -42,15 +44,31 @@ public class Task1 extends PjWorkshop{
 
     public void reset()
     {
-
+        m_geom.copy(m_geomSave);
+        m_geom.update(m_geom);
+        // Make sure we're working with triangles
+        PgElementSet.triangulate(m_geom);
+        m_gradientMatrix = null;
     }
 
-    public String[] getVectorFieldNames()
-    {
-        String[] vectorFieldNames = new String[m_geom.getNumVectorFields()];
+    public String[] getValidFunctionVectorFieldNames() {
+        ArrayList<String> vectorFieldNames = new ArrayList<>();
         for (int i = 0; i < m_geom.getNumVectorFields(); i++)
-            vectorFieldNames[i] = m_geom.getVectorField(i).getName();
-        return vectorFieldNames;
+            if (m_geom.getVectorField(i).getDimOfVectors() == 1 && m_geom.getVectorField(i).getBasedOn() == PgVectorField.VERTEX_BASED)
+                vectorFieldNames.add(m_geom.getVectorField(i).getName());
+        String[] res = new String[vectorFieldNames.size()];
+        vectorFieldNames.toArray(res);
+        return res;
+    }
+
+    public String[] getValidGradientVectorFieldNames() {
+        ArrayList<String> vectorFieldNames = new ArrayList<>();
+        for (int i = 0; i < m_geom.getNumVectorFields(); i++)
+            if (m_geom.getVectorField(i).getDimOfVectors() == 3 && m_geom.getVectorField(i).getBasedOn() == PgVectorField.ELEMENT_BASED)
+                vectorFieldNames.add(m_geom.getVectorField(i).getName());
+        String[] res = new String[vectorFieldNames.size()];
+        vectorFieldNames.toArray(res);
+        return res;
     }
 
     public void calculate(String valuesName, String checkName, String resultName) {
@@ -60,7 +78,6 @@ public class Task1 extends PjWorkshop{
         }
 
         PgVectorField functionValuesVectorField = m_geom.getVectorField(valuesName);
-//        if (functionValuesVectorField.getDimOfVectors() != 1) throw new Exception("The function values should be 1-dimensional");
         PdVector values = new PdVector(m_geom.getNumVertices());
         for (int i = 0; i < values.getSize(); i++)
             values.setEntry(i, functionValuesVectorField.getVector(i).getEntry(0));

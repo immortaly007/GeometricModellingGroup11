@@ -24,28 +24,28 @@ public class Task2_IP extends PjWorkshop_IP implements ActionListener {
 
     public void init() {
         super.init();
-        setTitle("Task 1 (Gradients)");
+        setTitle("Task 2 (Mesh editing)");
     }
 
     public String getNotice() {
-        return "A tool that can calculate the gradients of a linear function on some mesh";
+        return "This tool applies the given (3x3) matrix to the gradients of the embeddings of all elements in the set. " +
+                "The updated gradients are then used to solve a linear system such that the gradients of the embedding of the " +
+                "updated mesh are as close as possible (in the least-squares sense) to the updated gradients.";
     }
 
     public void setParent(PsUpdateIf parent) {
         super.setParent(parent);
         m_ws = (Task2)parent;
 
-        addSubTitle("Mesh Analysis");
+        addSubTitle("Mesh editing");
 
-        String[] columns = { "c1", "c2", "c3" };
+        String[] columns = { "x", "y", "z" };
         Object[][] data = {
                 { 1, 0, 0 },
                 { 0, 1, 0 },
                 { 0, 0, 1 }
         };
         m_tAnalysis = new JTable(data, columns);
-        //m_tAnalysis.setFillsViewportHeight(true);
-//        JScrollPane scrollPane = new JScrollPane(m_tAnalysis);
         add(m_tAnalysis);
 
         m_bCalculate = new Button("Calculate...");

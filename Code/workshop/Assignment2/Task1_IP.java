@@ -21,6 +21,7 @@ public class Task1_IP extends PjWorkshop_IP implements ActionListener {
     protected Label m_lResultVectorFieldName;
     protected  TextField m_tResultVectorFieldName;
     protected Button m_bCalculate;
+    protected Button m_bReset;
     protected Label m_lLog;
     Task1 m_ws;
 
@@ -52,16 +53,17 @@ public class Task1_IP extends PjWorkshop_IP implements ActionListener {
         m_lSelectFunctionVectorField = new Label("Function:");
 
         m_cSelectFunctionVectorField = new Choice();
-        String[] vectorFieldNames = m_ws.getVectorFieldNames();
-        for (int i = 0; i < vectorFieldNames.length; i++)
-            m_cSelectFunctionVectorField.add(vectorFieldNames[i]);
+        String[] functionVectorFieldNames = m_ws.getValidFunctionVectorFieldNames();
+        for (int i = 0; i < functionVectorFieldNames.length; i++)
+            m_cSelectFunctionVectorField.add(functionVectorFieldNames[i]);
         m_cSelectFunctionVectorField.select(0);
 
         m_lSelectCheckVectorField = new Label("Debug check:");
         m_cSelectCheckVectorField = new Choice();
         m_cSelectCheckVectorField.add("");
-        for (int i = 0; i < vectorFieldNames.length; i++)
-            m_cSelectCheckVectorField.add(vectorFieldNames[i]);
+        String[] gradientVectorFieldNames = m_ws.getValidGradientVectorFieldNames();
+        for (int i = 0; i < gradientVectorFieldNames.length; i++)
+            m_cSelectCheckVectorField.add(gradientVectorFieldNames[i]);
         m_cSelectCheckVectorField.select(0);
 
         m_lResultVectorFieldName = new Label("Result name:");
@@ -81,6 +83,10 @@ public class Task1_IP extends PjWorkshop_IP implements ActionListener {
 
         m_lLog = new Label();
         add(m_lLog);
+
+        m_bReset = new Button("Reset...");
+        m_bReset.addActionListener(this);
+        add(m_bReset);
 
 
 
@@ -102,11 +108,7 @@ public class Task1_IP extends PjWorkshop_IP implements ActionListener {
             m_lLog.setText("Gradients calculated and stored in vector field with name: " + result);
             m_lLog.validate();
             m_ws.showVectorField(result);
-            return;
-        }
-
-        if (event.getID() == PsDialog.BUTTON_RESET)
-        {
+        } else if (source == m_bReset || event.getID() == PsDialog.BUTTON_RESET) {
             m_ws.reset();
         }
     }

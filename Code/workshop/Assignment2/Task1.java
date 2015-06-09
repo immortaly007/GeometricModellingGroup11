@@ -4,16 +4,9 @@ import jv.geom.PgElementSet;
 import jv.geom.PgVectorField;
 import jv.object.PsDebug;
 import jv.project.PgGeometry;
-import jv.vecmath.PdMatrix;
 import jv.vecmath.PdVector;
-import jv.vecmath.PiVector;
-import jvx.geom.PgVertexStar;
-import jvx.numeric.PnMatrix;
 import jvx.numeric.PnSparseMatrix;
 import jvx.project.PjWorkshop;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
-import util.SimpleTriangle;
-import util.Util;
 import util.EverythingHelper;
 
 import java.util.ArrayList;

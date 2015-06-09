@@ -8,23 +8,12 @@ import jv.project.PgGeometry;
 import jv.vecmath.PdMatrix;
 import jv.vecmath.PdVector;
 import jv.vecmath.PiVector;
-import jvx.geom.PgVertexStar;
 import jvx.numeric.PnBiconjugateGradient;
-import jvx.numeric.PnMassMatrix;
 import jvx.numeric.PnSparseMatrix;
 import jvx.project.PjWorkshop;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
-import util.Util;
 import util.EverythingHelper;
 
-import javax.swing.*;
-import javax.swing.table.TableModel;
-import java.awt.*;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-
+import javax.swing.JTable;
 /**
  * Created by Immortaly007 on 16-5-2015.
  */

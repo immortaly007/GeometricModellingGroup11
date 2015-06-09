@@ -56,7 +56,8 @@ public class Task1_IP extends PjWorkshop_IP implements ActionListener {
         String[] functionVectorFieldNames = m_ws.getValidFunctionVectorFieldNames();
         for (int i = 0; i < functionVectorFieldNames.length; i++)
             m_cSelectFunctionVectorField.add(functionVectorFieldNames[i]);
-        m_cSelectFunctionVectorField.select(0);
+        if (functionVectorFieldNames.length > 0)
+            m_cSelectFunctionVectorField.select(0);
 
         m_lSelectCheckVectorField = new Label("Debug check:");
         m_cSelectCheckVectorField = new Choice();

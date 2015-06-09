@@ -2,7 +2,7 @@
   <configuration default="false" name="JavaView Gradients" type="Application" factoryName="Application">
     <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
     <option name="MAIN_CLASS_NAME" value="javaview" />
-    <option name="VM_PARAMETERS" value="" />
+    <option name="VM_PARAMETERS" value="-Djava.library.path=&quot;dll&quot; -Xmx1024m" />
     <option name="PROGRAM_PARAMETERS" value="codebase=. archive.dev=show model=../models/meshWithScalarFieldAndGradient0.jvx" />
     <option name="WORKING_DIRECTORY" value="file://$PROJECT_DIR$" />
     <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
@@ -12,7 +12,13 @@
     <option name="PASS_PARENT_ENVS" value="true" />
     <module name="Code" />
     <envs />
+    <RunnerSettings RunnerId="Debug">
+      <option name="DEBUG_PORT" value="" />
+      <option name="TRANSPORT" value="0" />
+      <option name="LOCAL" value="true" />
+    </RunnerSettings>
     <RunnerSettings RunnerId="Run" />
+    <ConfigurationWrapper RunnerId="Debug" />
     <ConfigurationWrapper RunnerId="Run" />
     <method />
   </configuration>

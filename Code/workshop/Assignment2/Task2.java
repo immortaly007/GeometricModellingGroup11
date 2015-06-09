@@ -126,13 +126,26 @@ public class Task2 extends PjWorkshop{
         PdVector GtMvgz = PnSparseMatrix.rightMultVector(GtMv, gradz, null);
 
         // Solve the linear system to approximate the updated gradients
-        try {
-            jvx.numeric.PnBiconjugateGradient solver = new PnBiconjugateGradient();
-            solver.solve(GtMvG, newx, GtMvgx);
-            solver.solve(GtMvG, newy, GtMvgy);
-            solver.solve(GtMvG, newz, GtMvgz);
-        } catch (Exception e) {
-            PsDebug.message(e.toString());
+        // First try Mumps
+        if (dev6.numeric.PnMumpsSolver.isAvailable()) {
+            try {
+                dev6.numeric.PnMumpsSolver.solve(GtMvG, newx, GtMvgx, PnMumpsSolver.Type.GENERAL_SYMMETRIC);
+                dev6.numeric.PnMumpsSolver.solve(GtMvG, newy, GtMvgy, PnMumpsSolver.Type.GENERAL_SYMMETRIC);
+                dev6.numeric.PnMumpsSolver.solve(GtMvG, newz, GtMvgz, PnMumpsSolver.Type.GENERAL_SYMMETRIC);
+            } catch (Exception e) {
+                PsDebug.message(e.toString());
+            }
+        } else {
+            // If Mumps doesn't work, use JavaViews solver
+            try {
+                jvx.numeric.PnBiconjugateGradient solver = new PnBiconjugateGradient();
+                solver.solve(GtMvG, newx, GtMvgx);
+                solver.solve(GtMvG, newy, GtMvgy);
+                solver.solve(GtMvG, newz, GtMvgz);
+            } catch(Exception e)
+            {
+                PsDebug.message(e.toString());
+            }
         }
 
         // Since the solution to the linear system is only defined up to translation,

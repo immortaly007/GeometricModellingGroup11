@@ -98,7 +98,7 @@ public class Task2 extends PjWorkshop{
         }
 
         // get the prerequisites
-        // get the diagonal mass matrix
+        // get the diagonal mass matrix (Mv)
         PnSparseMatrix mass = new PnSparseMatrix(m_geom.getNumElements() * 3, m_geom.getNumElements() * 3);
         for (int i = 0; i < m_geom.getNumElements(); i++)
         {
@@ -125,17 +125,19 @@ public class Task2 extends PjWorkshop{
         PdVector GtMvgy = PnSparseMatrix.rightMultVector(GtMv, grady, null);
         PdVector GtMvgz = PnSparseMatrix.rightMultVector(GtMv, gradz, null);
 
+        // Solve the linear system to approximate the updated gradients
         try {
-            jvx.numeric.PnBiconjugateGradient hmm = new PnBiconjugateGradient();
-            hmm.solve(GtMvG, newx, GtMvgx);
-            hmm.solve(GtMvG, newy, GtMvgy);
-            hmm.solve(GtMvG, newz, GtMvgz);
+            jvx.numeric.PnBiconjugateGradient solver = new PnBiconjugateGradient();
+            solver.solve(GtMvG, newx, GtMvgx);
+            solver.solve(GtMvG, newy, GtMvgy);
+            solver.solve(GtMvG, newz, GtMvgz);
         } catch (Exception e) {
             PsDebug.message(e.toString());
         }
 
+        // Since the solution to the linear system is only defined up to translation,
+        // move the mesh back to it's original location to prevent trouble.
         PdVector oldCenter = m_geom.getVertex(0);
-
         for (int i = 0; i < newx.getSize(); i++) {
             m_geom.setVertex(i, newx.getEntry(i), newy.getEntry(i), newz.getEntry(i));
         }

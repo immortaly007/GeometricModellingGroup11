@@ -72,27 +72,30 @@ public class Task1 extends PjWorkshop{
     }
 
     public void calculate(String valuesName, String checkName, String resultName) {
-        // If it doesn't yet exist, build the gradient matrices
+        // If it doesn't yet exist, build the gradient matrix
         if (m_gradientMatrix == null) {
             m_gradientMatrix = EverythingHelper.GetGradientMatrix(m_geom);
         }
 
+        // Get the values from the selected vector field
         PgVectorField functionValuesVectorField = m_geom.getVectorField(valuesName);
         PdVector values = new PdVector(m_geom.getNumVertices());
         for (int i = 0; i < values.getSize(); i++)
             values.setEntry(i, functionValuesVectorField.getVector(i).getEntry(0));
 
+        // Apply the gradient matrix to get the gradients
         PdVector grads = PnSparseMatrix.rightMultVector(m_gradientMatrix, values, null);
 
         // If a check vector is given, use it to check our solution:
-        if (checkName != "") {
+        if (!checkName.equals("")) {
             PgVectorField answers = m_geom.getVectorField(checkName);
             for (int i = 0; i < grads.getSize(); i++) {
                 PsDebug.message("Our answer: " + grads.getEntry(i) + ", expected: " + answers.getVector(i / 3).getEntry(i % 3));
             }
         }
 
-        if (resultName != "") {
+        // Create a new vector field with the gradients if a name is given
+        if (!resultName.equals("")) {
             PgVectorField result = new PgVectorField(3, PgVectorField.ELEMENT_BASED);
             result.setNumVectors(m_geom.getNumElements());
             result.setName(resultName);
